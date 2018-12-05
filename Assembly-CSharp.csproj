@@ -54,20 +54,20 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Duplicate_Scripts\MainHeroD.cs" />
-     <Compile Include="Assets\LiftUpMainCamera.cs" />
      <Compile Include="Assets\Script\Arm.cs" />
      <Compile Include="Assets\Script\Back_Ground.cs" />
      <Compile Include="Assets\Script\Back_GroundManager.cs" />
+     <Compile Include="Assets\Script\BGManager.cs" />
      <Compile Include="Assets\Script\Body.cs" />
      <Compile Include="Assets\Script\body_part.cs" />
      <Compile Include="Assets\Script\CameraManager.cs" />
-     <Compile Include="Assets\Script\CharacterController2D.cs" />
      <Compile Include="Assets\Script\GameManager.cs" />
      <Compile Include="Assets\Script\Ground.cs" />
      <Compile Include="Assets\Script\HeroManager.cs" />
      <Compile Include="Assets\Script\LeftArm.cs" />
      <Compile Include="Assets\Script\LeftLeg.cs" />
      <Compile Include="Assets\Script\Leg.cs" />
+     <Compile Include="Assets\Script\LiftUpMainCamera.cs" />
      <Compile Include="Assets\Script\MainCamera.cs" />
      <Compile Include="Assets\Script\MainHero.cs" />
      <Compile Include="Assets\Script\MainHeroSprite.cs" />
