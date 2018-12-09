@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class BGManager : MonoBehaviour {
 
@@ -10,14 +11,22 @@ public class BGManager : MonoBehaviour {
 	private float cWidth = 0;
 	private float cHeight = 0;
 	private Camera c;
-	private int GroundCount = 10;
-	private int Pointer = 0;
-	private float ScreenHeight;
-	private float ScreenWidth;
 	private Vector3 Origin = new Vector3(0, 5, 0);
+
+	private int GroundTypeCnt = 3;
+	private string GroundPrefix = "Ground/Gd_";
+	private int SceneItemCnt = 2;
+	private string ScenePrefix = "Scene/Sc_";
+	// store the basic info about each kind of ground block
+	private List<GroundBasicInfo> GroundBasicInfoList;
+	private List<GroundInfo> RGInfoList;
+	private List<GroundInfo> LGInfoList;
+
+	private List<SceneItemBasicInfo> SceneItemBasicInfoList;
+	private List<SceneItemInfo> SIInfoList;
+
 	public class PoolObj : MonoBehaviour{
 		public GameObject GObj;
-
 	}
 
 	// Use this for initialization
@@ -27,12 +36,13 @@ public class BGManager : MonoBehaviour {
 		cWidth = c.aspect * cHeight;
 		LeftBounder = Origin.x;
 		RightBounder = Origin.x;
-		ObjPools = new List<List<GameObject>>();
-		ObjPools.Add(new List<GameObject>());
-		for(int i = 0; i < GroundCount; i++) {
-			ObjPools[0].Add(Instantiate(transform.Find("Ground/Gd").gameObject, Origin, new Quaternion(0, 0, 0, 1), transform.Find("Ground")));
-			ObjPools[0][i].SetActive(false);
-		}
+		GroundBasicInfoList = new List<GroundBasicInfo>();
+		RGInfoList = new List<GroundInfo>();
+		LGInfoList = new List<GroundInfo>();
+		SceneItemBasicInfoList = new List<SceneItemBasicInfo>();
+		SIInfoList = new List<SceneItemInfo>();
+		InitBasicGroundInfo();
+		InitBasicSceneItemInfo();
 	}
 	
 	// Update is called once per frame
@@ -40,28 +50,224 @@ public class BGManager : MonoBehaviour {
 		float cXPos = c.transform.localPosition.x;
 		int ObjIndex = 0;
 		if(LeftBounder == RightBounder) {
-			GameObject obj = ObjPools[ObjIndex][Pointer];
+			int type = 0;
+			GroundBasicInfo tempBInfo = GroundBasicInfoList[type];
+			string gname = tempBInfo.getGName();
+			GameObject obj = Instantiate(transform.Find(gname).gameObject, new Vector3(0,0,0), new Quaternion(0, 0, 0, 1), transform.Find("Ground"));
 			obj.transform.localPosition = Origin;
 			obj.SetActive(true);
-			RightBounder = RightBounder + obj.GetComponent<BoxCollider2D>().bounds.size.x / 2;
-			LeftBounder = LeftBounder - obj.GetComponent<BoxCollider2D>().bounds.size.x / 2;
-			Pointer = Pointer + 1;
+			RightBounder = RightBounder + tempBInfo.rightEdge.x;
+			LeftBounder = LeftBounder + tempBInfo.leftEdge.x;
+			RGInfoList.Add(new GroundInfo(0,type,GroundBasicInfoList[0].leftEdge + (Vector2)Origin, GroundBasicInfoList[0].rightEdge + (Vector2)Origin, Origin, obj));
+			LGInfoList.Add(new GroundInfo(0,type,GroundBasicInfoList[0].leftEdge + (Vector2)Origin, GroundBasicInfoList[0].rightEdge + (Vector2)Origin, Origin, obj));
 		}
 		while(cXPos + cWidth >= RightBounder) {
-			if(Pointer >= ObjPools[ObjIndex].Count) Pointer = 0;
-			GameObject obj = ObjPools[ObjIndex][Pointer];
+			int type = Random.Range(0, GroundTypeCnt);
+			bool flip = Random.Range(0, 2) == 0 ? true : false;
+			GroundInfo LastGInfo = RGInfoList[RGInfoList.Count-1];
+			if(LastGInfo.type != 0) {
+				type = 0;
+				flip = true;
+			}
+			GroundBasicInfo tempBInfo = GroundBasicInfoList[type];
+			string gname = tempBInfo.getGName();
+			GameObject obj = Instantiate(transform.Find(gname).gameObject, new Vector3(0,0,0), new Quaternion(0, 0, 0, 1), transform.Find("Ground"));
+			Vector2 newLeftEdge;
+			Vector2 newOrigin;
+			Vector2 newRightEdge;
+			if(flip){
+				newLeftEdge = LastGInfo.rightEdge;
+				newOrigin = newLeftEdge - tempBInfo.leftEdge;
+				newRightEdge = newOrigin + tempBInfo.rightEdge;
+			}
+			else {
+				obj.transform.localScale = new Vector2(-1, 1);
+				newLeftEdge = LastGInfo.rightEdge;
+				newOrigin = new Vector2(newLeftEdge.x + tempBInfo.rightEdge.x, newLeftEdge.y - tempBInfo.rightEdge.y);
+				newRightEdge = new Vector2(newOrigin.x - tempBInfo.leftEdge.x, newOrigin.y + tempBInfo.leftEdge.y);
+			}
+			obj.transform.localPosition = newOrigin;
+			RGInfoList.Add(new GroundInfo(0,type,newLeftEdge, newRightEdge, newOrigin, obj));
 			obj.SetActive(true);
-			obj.transform.localPosition = new Vector3(RightBounder + obj.GetComponent<BoxCollider2D>().bounds.size.x / 2, Origin.y, Origin.z);
-			RightBounder = RightBounder + obj.GetComponent<BoxCollider2D>().bounds.size.x;
-			Pointer = Pointer + 1;
+
+			AddSceneItem(newLeftEdge, newRightEdge, Random.Range(0, SceneItemCnt));
+
+			RightBounder = RightBounder + tempBInfo.rightEdge.x - tempBInfo.leftEdge.x;
 		}
 		while(cXPos - cWidth <= LeftBounder) {
-			if(Pointer >= ObjPools[ObjIndex].Count) Pointer = 0;
-			GameObject obj = ObjPools[ObjIndex][Pointer];
+			int type = Random.Range(0, GroundTypeCnt);
+			bool flip = Random.Range(0, 2) == 0 ? true : false;
+			GroundInfo LastGInfo = LGInfoList[LGInfoList.Count-1];
+			if(LastGInfo.type != 0) {
+				type = 0;
+				flip = true;
+			}
+			GroundBasicInfo tempBInfo = GroundBasicInfoList[type];
+			string gname = tempBInfo.getGName();
+			GameObject obj = Instantiate(transform.Find(gname).gameObject, new Vector3(0,0,0), new Quaternion(0, 0, 0, 1), transform.Find("Ground"));
+			Vector2 newLeftEdge;
+			Vector2 newOrigin;
+			Vector2 newRightEdge;
+			if(flip){
+				newRightEdge = LastGInfo.leftEdge;
+				newOrigin = newRightEdge - tempBInfo.rightEdge;
+				newLeftEdge = newOrigin + tempBInfo.leftEdge;
+			}
+			else {
+				obj.transform.localScale = new Vector2(-1, 1);
+				newRightEdge = LastGInfo.leftEdge;
+				newOrigin = new Vector2(newRightEdge.x + tempBInfo.leftEdge.x, newRightEdge.y - tempBInfo.leftEdge.y);
+				newLeftEdge = new Vector2(newOrigin.x - tempBInfo.rightEdge.x, newOrigin.y + tempBInfo.rightEdge.y);
+			}
+			obj.transform.localPosition = newOrigin;
+			LGInfoList.Add(new GroundInfo(0, type, newLeftEdge, newRightEdge, newOrigin, obj));
 			obj.SetActive(true);
-			obj.transform.localPosition = new Vector3(LeftBounder - obj.GetComponent<BoxCollider2D>().bounds.size.x / 2, Origin.y, Origin.z);
-			LeftBounder = LeftBounder - obj.GetComponent<BoxCollider2D>().bounds.size.x / 2;
-			Pointer = Pointer + 1;
+
+			AddSceneItem(newLeftEdge, newRightEdge, Random.Range(0, SceneItemCnt));
+
+			LeftBounder = LeftBounder - tempBInfo.rightEdge.x + tempBInfo.leftEdge.x;
 		}
+	}
+
+	public void InitBasicGroundInfo() {
+		for(int i = 0; i < GroundTypeCnt; i++) {
+			string GroundName = GroundPrefix + (i+1).ToString();
+			GameObject GroundGObj = transform.Find(GroundName).gameObject;
+			if(GroundGObj.GetComponent<BoxCollider2D>() != null) {
+				BoxCollider2D TempBoxCollider2D = GroundGObj.GetComponent<BoxCollider2D>();
+				float top = TempBoxCollider2D.offset.y + (TempBoxCollider2D.size.y / 2f);
+				float btm = TempBoxCollider2D.offset.y - (TempBoxCollider2D.size.y / 2f);
+				float left = TempBoxCollider2D.offset.x - (TempBoxCollider2D.size.x / 2f);
+				float right = TempBoxCollider2D.offset.x + (TempBoxCollider2D.size.x /2f);
+				GroundBasicInfoList.Add(new GroundBasicInfo(new Vector2(left, top), new Vector2(right, top), GroundName));
+			}
+			else if(GroundGObj.GetComponent<PolygonCollider2D>()!=null){
+				PolygonCollider2D TempPolygonCollider2D = GroundGObj.GetComponent<PolygonCollider2D>();
+				Vector2[] points = TempPolygonCollider2D.points;
+				Vector2[] sortedPoints = points.OrderBy(v => v.x).ToArray<Vector2>();
+				int index = 0;
+				float left = sortedPoints[index].x;
+				float right = sortedPoints[sortedPoints.Length-1].x;
+				float leftTop = sortedPoints[index].y;
+				float rightTop = sortedPoints[sortedPoints.Length-1].y;
+				index = index + 1;
+				while(index< sortedPoints.Length && sortedPoints[index].x == left) {
+					leftTop = Mathf.Max(leftTop, sortedPoints[index].y);
+					index = index + 1;
+				}
+				index = sortedPoints.Length - 2;
+				while(index >= 0 && sortedPoints[index].x == right) {
+					rightTop = Mathf.Max(rightTop, sortedPoints[index].y);
+					index = index - 1;
+				}
+				GroundBasicInfoList.Add(new GroundBasicInfo(new Vector2(left, leftTop), new Vector2(right, rightTop), GroundName));
+			}
+			else {
+			}
+		}
+	}
+
+	public void InitBasicSceneItemInfo() {
+		for(int i = 0; i < SceneItemCnt; i++) {
+			string SIName = ScenePrefix + (i+1).ToString();
+			GameObject SIGObj = transform.Find(SIName).gameObject;
+			if(SIGObj.GetComponent<CircleCollider2D>() != null) {
+				CircleCollider2D Temp = SIGObj.GetComponent<CircleCollider2D>();
+				float top = Temp.offset.y + Temp.radius;
+				float btm = Temp.offset.y - Temp.radius;
+				float left = Temp.offset.x - Temp.radius;
+				float right = Temp.offset.x + Temp.radius;
+				SceneItemBasicInfoList.Add(new SceneItemBasicInfo(new Vector2(left, top), new Vector2(right, btm), SIName));
+			}
+			else if(SIGObj.GetComponent<BoxCollider2D>() != null) {
+				BoxCollider2D TempBoxCollider2D = SIGObj.GetComponent<BoxCollider2D>();
+				float top = TempBoxCollider2D.offset.y + (TempBoxCollider2D.size.y / 2f);
+				float btm = TempBoxCollider2D.offset.y - (TempBoxCollider2D.size.y / 2f);
+				float left = TempBoxCollider2D.offset.x - (TempBoxCollider2D.size.x / 2f);
+				float right = TempBoxCollider2D.offset.x + (TempBoxCollider2D.size.x /2f);
+				SceneItemBasicInfoList.Add(new SceneItemBasicInfo(new Vector2(left, top), new Vector2(right, btm), SIName));
+			}
+			else if(SIGObj.GetComponent<PolygonCollider2D>()!=null){
+				PolygonCollider2D TempPolygonCollider2D = SIGObj.GetComponent<PolygonCollider2D>();
+				Vector2[] points = TempPolygonCollider2D.points;
+				Vector2[] sortedPoints = points.OrderBy(v => v.x).ToArray<Vector2>();
+				int index = 0;
+				float left = sortedPoints[index].x;
+				float right = sortedPoints[sortedPoints.Length-1].x;
+				float leftTop = sortedPoints[index].y;
+				float rightBtm = sortedPoints[sortedPoints.Length-1].y;
+				index = index + 1;
+				while(index< sortedPoints.Length && sortedPoints[index].x == left) {
+					leftTop = Mathf.Max(leftTop, sortedPoints[index].y);
+					index = index + 1;
+				}
+				index = sortedPoints.Length - 2;
+				while(index >= 0 && sortedPoints[index].x == right) {
+					rightBtm = Mathf.Min(rightBtm, sortedPoints[index].y);
+					index = index - 1;
+				}
+				SceneItemBasicInfoList.Add(new SceneItemBasicInfo(new Vector2(left, leftTop), new Vector2(right, rightBtm), SIName));
+			}
+			else {
+			}
+		}
+	}
+
+	public void AddSceneItem(Vector2 vl, Vector2 vr, int index) {
+		float ybtm = Mathf.Max(vl.y, vr.y);
+		float xpos = Random.Range(vl.x, vr.x);
+		GameObject gobj = Instantiate(transform.Find(SceneItemBasicInfoList[index].SIName).gameObject, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 1), transform.Find("Scene"));
+		gobj.transform.localPosition = new Vector3(xpos, ybtm - 2 * SceneItemBasicInfoList[index].RBVector.y, 0);
+		gobj.SetActive(true);
+	}
+
+	public string GetScenePrefix() {
+		return ScenePrefix;
+	}
+}
+
+public class SceneItemBasicInfo : BGManager {
+	public string SIName;
+	public Vector2 LTVector;
+	public Vector2 RBVector;
+	public SceneItemBasicInfo(Vector2 lt, Vector2 rb, string name) {
+		SIName = name;
+		LTVector = lt;
+		RBVector = rb;
+	}
+}
+
+public class SceneItemInfo: BGManager {
+}
+
+public class GroundBasicInfo : BGManager{
+	public Vector2 leftEdge;
+	public Vector2 rightEdge;
+	public string GName;
+	public GroundBasicInfo(Vector2 left, Vector2 right, string gname) {
+		leftEdge = left;
+		rightEdge = right;
+		GName = gname;
+	}
+	public string getGName(){
+		return GName;
+	}
+}
+
+// store all ground left edge, right edge, x, y offset. Make it easy to reuse in future.
+public class GroundInfo : BGManager {
+	public int index;
+	public int type;
+	public Vector2 leftEdge;
+	public Vector2 rightEdge;
+	public Vector2 offset;
+	public GameObject GObj;
+	public GroundInfo(int idx, int t, Vector2 l, Vector2 r, Vector2 o, GameObject G) {
+		index = idx;
+		type = t;
+		leftEdge = l;
+		rightEdge = r;
+		offset = o;
+		GObj = G;
 	}
 }

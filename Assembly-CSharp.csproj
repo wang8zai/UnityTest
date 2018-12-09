@@ -77,6 +77,7 @@
      <Compile Include="Assets\Script\RightArm.cs" />
      <Compile Include="Assets\Script\RightLeg.cs" />
      <Compile Include="Assets\Script\SceneManager.cs" />
+     <Compile Include="Assets\Script\Sedan.cs" />
      <None Include="Assets\Resources\Imported\Kenney Assets\Castle Kit\License.txt" />
  <Reference Include="Unity.2D.Animation.Runtime">
  <HintPath>G:/Users/lenovo/Documents/20180127/Test/Library/ScriptAssemblies/Unity.2D.Animation.Runtime.dll</HintPath>

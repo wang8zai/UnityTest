@@ -7,7 +7,7 @@ public class LiftUpMainCamera : MonoBehaviour {
 	private GameObject MainHero;
 	// Use this for initialization
 	void Start () {
-		MainHero = GameObject.Find("MainHeroSprite");
+		MainHero = GameObject.Find("Player1");
 	}
 	
 	// Update is called once per frame

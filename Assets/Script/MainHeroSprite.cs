@@ -20,6 +20,8 @@ public class MainHeroSprite : MonoBehaviour {
 	private bool facingRight = true;
 	private bool holdFlag = false;
 	private bool catchFlag = false; // if the character wants to catch the item or not. If he wants, the item will be detected by raycast 2D.
+	private bool ForceRunFlag = false;
+	private int jumpState = 0;
 	private HingeJoint2D hingeJointToItem = null;
 
 	private bool isGrounded = false;
@@ -27,6 +29,8 @@ public class MainHeroSprite : MonoBehaviour {
 	private bool FallDownFlag = false;
 	public LayerMask groundLayer;
 	public LayerMask ItemLayer;
+
+	private bool collisionFlag = false;
 
 	private KeyCode CUp;
 	private KeyCode CDown;
@@ -67,12 +71,16 @@ public class MainHeroSprite : MonoBehaviour {
 		UpdateMove();
 		UpdateCatch();
 		UpdateJump();
-		// Debug.Log("bool " + !(!isGrounded && rd2D.velocity.y < 0.0f));
 	}
 
 	private void UpdateMove() {
 		Vector3 targetVelocity = new Vector2(moveVelocity * LowerState * (facingRight==true?1:-1), rd2D.velocity.y);
-		rd2D.velocity = Vector3.SmoothDamp(rd2D.velocity, targetVelocity, ref refvelocity, 0.03f);
+		if(!collisionFlag) {
+			rd2D.velocity = Vector3.SmoothDamp(rd2D.velocity, targetVelocity, ref refvelocity, 0.03f);
+		}
+		else {
+			collisionFlag = false;
+		}
 	}
 
 	private void UpdateCatch() {
@@ -100,29 +108,36 @@ public class MainHeroSprite : MonoBehaviour {
 	}
 
 	private void UpdateJump() {
-		if(isGrounded) FallDownFlag = false;
-		if(FallDownFlag || (rd2D.velocity.y <= 0.0f && isItemGrounded)) FallDownFlag = true;
-		if(Input.GetKey(CJump) && (isGrounded || isItemGrounded)) {
-			rd2D.velocity = new Vector2(rd2D.velocity.x, 10.0f);
+		if(isGrounded || isItemGrounded) {
+			jumpState = 0;
 		}
-
+		if(rd2D.velocity.y < 0.0f && (!isItemGrounded && !isGrounded)) {
+			jumpState = 2;
+		}
+		if(Input.GetKeyDown(CJump) && (isGrounded || isItemGrounded)) {
+			rd2D.velocity = new Vector2(rd2D.velocity.x, 10.0f);
+			// rd2D.AddForce(new Vector2(0, 10.0f));
+			// jumpState = 1;
+		}
+		HeroAllAnimator.SetInteger("JumpState", jumpState);
 		BoxCollider2D colliderA = GameObject.Find("Item").GetComponent<BoxCollider2D>();
 		BoxCollider2D colliderB = GetComponent<BoxCollider2D>();
 		CircleCollider2D colliderC = GetComponent<CircleCollider2D>();
-		Physics2D.IgnoreCollision(colliderA, colliderB, !(!(isGrounded) && FallDownFlag));
-		Physics2D.IgnoreCollision(colliderA, colliderC, !(!(isGrounded) && FallDownFlag));
+		Physics2D.IgnoreCollision(colliderA, colliderB, jumpState == 1 || (isGrounded && jumpState == 0));
+		Physics2D.IgnoreCollision(colliderA, colliderC, jumpState == 1 || (isGrounded && jumpState == 0));
 	}
 
 	private void UpdateStates() {
 		UpdateGroundStates();
 		UpdateUpperStates();
 		UpdateLowerStates();
+
+
 	}
 
 	private void UpdateGroundStates() {
 		isGrounded = Physics2D.OverlapArea(new Vector2(transform.localPosition.x - GetComponent<CircleCollider2D>().radius, transform.localPosition.y + PlayerBottom - 0.1f), new Vector2(transform.localPosition.x + GetComponent<CircleCollider2D>().radius,  transform.localPosition.y + PlayerBottom), groundLayer);
 		isItemGrounded = Physics2D.OverlapArea(new Vector2(transform.localPosition.x - GetComponent<CircleCollider2D>().radius, transform.localPosition.y + PlayerBottom - 0.1f), new Vector2(transform.localPosition.x + GetComponent<CircleCollider2D>().radius,  transform.localPosition.y + PlayerBottom), ItemLayer);
-		
 	}
 
 	private void UpdateUpperStates(){
@@ -171,120 +186,49 @@ public class MainHeroSprite : MonoBehaviour {
 	}
 
 	private void SetLowerState() {
-		// if(holdFlag){
-		// 	if(LowerState == 0) {
-		// 		if(Input.GetKey(CRight)) {
-		// 			HeroAllAnimator.SetInteger("WalkState", 10);
-		// 			if(!facingRight) {
-		// 				Flip();
-		// 			}
-		// 		}
-		// 		else if(Input.GetKey(CLeft)){
-		// 			HeroAllAnimator.SetInteger("WalkState", 10);
-		// 			if(facingRight) {
-		// 				Flip();
-		// 			}
-		// 		}
-		// 		else {
-		// 			HeroAllAnimator.SetInteger("WalkState", 0);
-		// 		}
-		// 	}
-		// 	else if(LowerState == 1) {
-		// 		if(facingRight){
-		// 			if(Input.GetKey(CRight)) {
-		// 				HeroAllAnimator.SetInteger("WalkState", 15);
-		// 			}
-		// 			else if(Input.GetKey(CLeft)){
-		// 				HeroAllAnimator.SetInteger("WalkState", 0);
-		// 			}
-		// 			else {
-		// 				HeroAllAnimator.SetInteger("WalkState", 10);
-		// 			}
-		// 		}
-		// 		else {
-		// 			if(Input.GetKey(CLeft)) {
-		// 				HeroAllAnimator.SetInteger("WalkState", 15);
-		// 			}
-		// 			else if(Input.GetKey(CRight)){
-		// 				HeroAllAnimator.SetInteger("WalkState", 0);
-		// 			}
-		// 			else {
-		// 				HeroAllAnimator.SetInteger("WalkState", 10);
-		// 			}
-		// 		}
-		// 	}
-		// 	else if(LowerState == 2) {
-		// 		if(facingRight) {
-		// 			if(Input.GetKey(CRight)) {
-		// 				HeroAllAnimator.SetInteger("WalkState", 15);
-		// 			}
-		// 			else if(Input.GetKey(CLeft)){
-		// 				HeroAllAnimator.SetInteger("WalkState", 10);
-		// 			}
-		// 			else {
-		// 				HeroAllAnimator.SetInteger("WalkState", 15);
-		// 			}
-		// 		}
-		// 		else {
-		// 			if(Input.GetKey(CLeft)) {
-		// 				HeroAllAnimator.SetInteger("WalkState", 15);
-		// 			}
-		// 			else if(Input.GetKey(CRight)){
-		// 				HeroAllAnimator.SetInteger("WalkState", 10);
-		// 			}
-		// 			else {
-		// 				HeroAllAnimator.SetInteger("WalkState", 15);
-		// 			}
-		// 		}
-		// 	}
-		// 	else {
-		// 	}
-		// }
-		// else {
-			if(Input.GetKey(CRight)) {
-				if(!facingRight) {
-					Flip();
-					HeroAllAnimator.SetInteger("WalkState", 0);
-					LowerState = 0;
-				}
-				else {
-					HeroAllAnimator.SetInteger("WalkState", 10);
-					LowerState = 1;
-					if(Input.GetKey(CRun)) {
-						HeroAllAnimator.SetInteger("WalkState", 15);
-						LowerState = 3;
-					}
-				}
-			}
-			else if(Input.GetKey(CLeft)) {
-				if(facingRight) {
-					Flip();
-					HeroAllAnimator.SetInteger("WalkState", 0);
-					LowerState = 0;
-				}
-				else {
-					HeroAllAnimator.SetInteger("WalkState", 10);	
-					LowerState = 1;		
-					if(Input.GetKey(CRun)) {
-						HeroAllAnimator.SetInteger("WalkState", 15);
-						LowerState = 3;
-					}	
-				}
+		if(Input.GetKey(CRight)) {
+			if(!facingRight) {
+				Flip();
+				HeroAllAnimator.SetInteger("WalkState", 0);
+				LowerState = 0;
 			}
 			else {
-				HeroAllAnimator.SetInteger("WalkState", 0);
-				LowerState = 0;			
+				HeroAllAnimator.SetInteger("WalkState", 10);
+				LowerState = 1;
+				if(Input.GetKey(CRun)) {
+					HeroAllAnimator.SetInteger("WalkState", 15);
+					LowerState = 3;
+				}
 			}
-
-		// }
+		}
+		else if(Input.GetKey(CLeft)) {
+			if(facingRight) {
+				Flip();
+				HeroAllAnimator.SetInteger("WalkState", 0);
+				LowerState = 0;
+			}
+			else {
+				HeroAllAnimator.SetInteger("WalkState", 10);	
+				LowerState = 1;		
+				if(Input.GetKey(CRun)) {
+					HeroAllAnimator.SetInteger("WalkState", 15);
+					LowerState = 3;
+				}	
+			}
+		}
+		else {
+			HeroAllAnimator.SetInteger("WalkState", 0);
+			LowerState = 0;			
+		}
 	}
 
 	private void SetUpperState() {
 		if(UpperState == 0){
-			if(Input.GetKey(CUp))
+			if(Input.GetKey(CUp)){
 				HeroAllAnimator.SetInteger("LiftState", 10);
-			else if (!Input.GetKey(CUp) && !Input.GetKey(CDown)){
-				HeroAllAnimator.SetInteger("LiftState", 0);
+			// }
+			// else if (!Input.GetKey(CUp) && !Input.GetKey(CDown)){
+			// 	HeroAllAnimator.SetInteger("LiftState", 0);
 			}
 			else{
 			}		
@@ -297,7 +241,7 @@ public class MainHeroSprite : MonoBehaviour {
 				HeroAllAnimator.SetInteger("LiftState", 0);
 			}
 			else{
-				HeroAllAnimator.SetInteger("LiftState", 10);
+				// HeroAllAnimator.SetInteger("LiftState", 10);
 			}	
 		}
 		else if(UpperState == 2) {
@@ -330,17 +274,12 @@ public class MainHeroSprite : MonoBehaviour {
 			HeroAllAnimator.SetInteger("SquatState", 0);
 		}
 
-		if(Input.GetKey(CDrop)) {
-			holdFlag = false;
-			// transform.Find("Upper/LeftArmUpper/LeftArmLower/LeftHand").gameObject.GetComponent<CircleCollider2D>().enabled = false;
-			// transform.Find("Upper/RightArmUpper/RightArmLower/RightHand").gameObject.GetComponent<CircleCollider2D>().enabled = false;
-		}
+		if(Input.GetKeyDown(CDrop)) {
+			ForceRunFlag = !ForceRunFlag;		}
 	}
 
 	private void SetCatchFlag() {
 		catchFlag = true;
-		// transform.Find("Upper/LeftArmUpper/LeftArmLower/LeftHand").gameObject.GetComponent<CircleCollider2D>().enabled = true;
-		// transform.Find("Upper/RightArmUpper/RightArmLower/RightHand").gameObject.GetComponent<CircleCollider2D>().enabled = true;	
 	}
 
 	private void ResetCatchFlag() {
@@ -350,5 +289,9 @@ public class MainHeroSprite : MonoBehaviour {
 	private void Flip() {
 		facingRight = !facingRight;
  		transform.localScale = new Vector3((-1) * transform.localScale.x, transform.localScale.y, transform.localScale.z);
+	}
+
+	public void SetCollisionFlag(bool flag) {
+		collisionFlag = flag;
 	}
 }
