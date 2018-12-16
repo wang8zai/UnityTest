@@ -40,25 +40,32 @@ public class MainHeroSprite : MonoBehaviour {
 	private KeyCode CDrop;
 	private KeyCode CRun;
 	private KeyCode CJump;
+
+	public Dictionary<KeyCode, bool> npcStateDic = new Dictionary<KeyCode, bool>();
+	enum getType : byte {getK, getKD};
 	// Use this for initialization
 	void Start () {
 		HeroAllAnimator = GetComponent<Animator>();
 		rd2D = GetComponent<Rigidbody2D>();
-
 		PlayerBottom = GetComponent<CircleCollider2D>().offset.y - GetComponent<CircleCollider2D>().radius;
+		SetUpController();
+		HeroAllAnimator.SetBool("holdFlag", false);
+	}
 
+	void SetUpController() {
 		PController = new PlayerController();
 		KeyCode[] KC = PController.GetKeyCode(PlayerIndex);
 		CUp = KC[0];
-		CDown = KC[2];
 		CLeft = KC[1];
+		CDown = KC[2];
 		CRight = KC[3];
 		CSquat = KC[4];
 		CDrop = KC[5];
 		CRun = KC[6];
 		CJump = KC[7];
-
-		HeroAllAnimator.SetBool("holdFlag", false);
+		for(int i = 0; i < KC.Length; i++) {
+			npcStateDic[KC[i]] = false;
+		}
 	}
 	
 	// Update is called once per frame
@@ -74,12 +81,16 @@ public class MainHeroSprite : MonoBehaviour {
 	}
 
 	private void UpdateMove() {
+		RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0, -3), Mathf.Infinity, groundLayer);
+		// if (hit.collider != null && Mathf.Abs(hit.normal.x) > 0.1f) {
+		// 	Debug.Log(hit.normal);
+		// }
 		Vector3 targetVelocity = new Vector2(moveVelocity * LowerState * (facingRight==true?1:-1), rd2D.velocity.y);
 		if(collisionInt == 0) {
 			rd2D.velocity = Vector3.SmoothDamp(rd2D.velocity, targetVelocity, ref refvelocity, 0.1f);
 		}
 		else {
-			collisionInt = collisionInt -1;
+			collisionInt = collisionInt - 1;
 		}
 	}
 
@@ -93,7 +104,6 @@ public class MainHeroSprite : MonoBehaviour {
 			{
 				hingeJointToItem = hit.collider.gameObject.AddComponent<HingeJoint2D>();
 				hingeJointToItem.autoConfigureConnectedAnchor = false;
-
              	hingeJointToItem.connectedBody = GetComponent<Rigidbody2D>();
 				connectPoint = hit.collider.gameObject.transform.InverseTransformPoint(hit.point);
 				hingeJointToItem.anchor = connectPoint;
@@ -114,10 +124,9 @@ public class MainHeroSprite : MonoBehaviour {
 		if(rd2D.velocity.y < 0.0f && (!isItemGrounded && !isGrounded)) {
 			jumpState = 2;
 		}
-		if(Input.GetKeyDown(CJump) && (isGrounded || isItemGrounded)) {
-			rd2D.velocity = new Vector2(rd2D.velocity.x, 10.0f);
-			// rd2D.AddForce(new Vector2(0, 10.0f));
-			// jumpState = 1;
+		if(InputTrigger(CJump, (byte)getType.getKD) && (isGrounded || isItemGrounded)) {
+			rd2D.velocity = new Vector2(rd2D.velocity.x, 20.0f);
+			jumpState = 1;
 		}
 		HeroAllAnimator.SetInteger("JumpState", jumpState);
 		BoxCollider2D colliderA = GameObject.Find("Item").GetComponent<BoxCollider2D>();
@@ -131,8 +140,6 @@ public class MainHeroSprite : MonoBehaviour {
 		UpdateGroundStates();
 		UpdateUpperStates();
 		UpdateLowerStates();
-
-
 	}
 
 	private void UpdateGroundStates() {
@@ -186,7 +193,7 @@ public class MainHeroSprite : MonoBehaviour {
 	}
 
 	private void SetLowerState() {
-		if(Input.GetKey(CRight)) {
+		if(InputTrigger(CRight, (byte)getType.getK)) {
 			if(!facingRight) {
 				Flip();
 				HeroAllAnimator.SetInteger("WalkState", 0);
@@ -195,13 +202,13 @@ public class MainHeroSprite : MonoBehaviour {
 			else {
 				HeroAllAnimator.SetInteger("WalkState", 10);
 				LowerState = 1;
-				if(Input.GetKey(CRun)) {
+				if(InputTrigger(CRun, (byte)getType.getK)) {
 					HeroAllAnimator.SetInteger("WalkState", 15);
 					LowerState = 3;
 				}
 			}
 		}
-		else if(Input.GetKey(CLeft)) {
+		else if(InputTrigger(CLeft, (byte)getType.getK)) {
 			if(facingRight) {
 				Flip();
 				HeroAllAnimator.SetInteger("WalkState", 0);
@@ -210,7 +217,7 @@ public class MainHeroSprite : MonoBehaviour {
 			else {
 				HeroAllAnimator.SetInteger("WalkState", 10);	
 				LowerState = 1;		
-				if(Input.GetKey(CRun)) {
+				if(InputTrigger(CRun, (byte)getType.getK)) {
 					HeroAllAnimator.SetInteger("WalkState", 15);
 					LowerState = 3;
 				}	
@@ -224,7 +231,7 @@ public class MainHeroSprite : MonoBehaviour {
 
 	private void SetUpperState() {
 		if(UpperState == 0){
-			if(Input.GetKey(CUp)){
+			if(InputTrigger(CUp, (byte)getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 10);
 			// }
 			// else if (!Input.GetKey(CUp) && !Input.GetKey(CDown)){
@@ -234,10 +241,10 @@ public class MainHeroSprite : MonoBehaviour {
 			}		
 		}
 		else if(UpperState == 1) {
-			if(Input.GetKey(CUp)){
+			if(InputTrigger(CUp, (byte)getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 11);
 			}
-			else if(Input.GetKey(CDown)){
+			else if(InputTrigger(CDown, (byte)getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 0);
 			}
 			else{
@@ -245,9 +252,9 @@ public class MainHeroSprite : MonoBehaviour {
 			}	
 		}
 		else if(UpperState == 2) {
-			if(Input.GetKey(CUp)){
+			if(InputTrigger(CUp, (byte)getType.getK)){
 			}
-			else if(Input.GetKey(CDown)){
+			else if(InputTrigger(CDown, (byte)getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 10);
 			}
 			else{
@@ -259,7 +266,7 @@ public class MainHeroSprite : MonoBehaviour {
 	}
 
 	private void SetSquatState() {
-		if(Input.GetKeyDown(CSquat)) {
+		if(InputTrigger(CSquat, (byte)getType.getKD)) {
 			if(holdFlag) {
 				if(hingeJointToItem != null) {
 					Destroy(hingeJointToItem);
@@ -275,7 +282,8 @@ public class MainHeroSprite : MonoBehaviour {
 		}
 
 		if(Input.GetKeyDown(CDrop)) {
-			ForceRunFlag = !ForceRunFlag;		}
+			ForceRunFlag = !ForceRunFlag;
+		}
 	}
 
 	private void SetCatchFlag() {
@@ -293,5 +301,24 @@ public class MainHeroSprite : MonoBehaviour {
 
 	public void SetCollisionInt(int i) {
 		collisionInt = collisionInt + i;
+	}
+
+	public bool InputTrigger(KeyCode kc, byte b) {
+		if(PlayerIndex < 10) {
+			if(b == (byte)getType.getKD) return Input.GetKeyDown(kc);
+			return Input.GetKey(kc);
+		}
+		else {
+			if(b == (byte)getType.getKD) {
+				bool rtn = npcStateDic[kc];
+				npcStateDic[kc] = false;
+				return rtn;
+			}
+			return npcStateDic[kc];
+		}
+	}
+
+	public void SetTrigger(KeyCode kc, bool t) {
+		npcStateDic[kc] = t;
 	}
 }
