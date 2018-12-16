@@ -14,7 +14,7 @@ public class Sedan : MonoBehaviour {
 		
 	}
 
-	void OnCollisionEnter2D(Collision2D coll)
+	void OnCollisionStay2D(Collision2D coll)
 	{
 		string objname = coll.gameObject.name;
 		objname = objname.Remove(3);
@@ -36,6 +36,7 @@ public class Sedan : MonoBehaviour {
 				GameObject.Find("Player2").GetComponent<MainHeroSprite>().SetCollisionInt(1);
 
 				coll.gameObject.GetComponent<Rigidbody2D>().AddForceAtPosition(-10* hitNormal, hited);
+				coll.gameObject.GetComponent<sceneItem>().minusDuration(1);
             }
 
 			// Destroy(coll.gameObject);

@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Duplicate_Scripts\MainHeroD.cs" />
+     <Compile Include="Assets\sceneItem.cs" />
      <Compile Include="Assets\Script\Arm.cs" />
      <Compile Include="Assets\Script\Back_Ground.cs" />
      <Compile Include="Assets\Script\Back_GroundManager.cs" />
