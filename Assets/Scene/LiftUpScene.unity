@@ -547,7 +547,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4307333168997788, guid: a06c92cfdf1e2ee41bbd9fee3829fc20, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 4307333168997788, guid: a06c92cfdf1e2ee41bbd9fee3829fc20, type: 2}
       propertyPath: m_LocalPosition.y
@@ -588,11 +588,35 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1214866912206994, guid: a06c92cfdf1e2ee41bbd9fee3829fc20, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114794134918639906, guid: a06c92cfdf1e2ee41bbd9fee3829fc20, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: a06c92cfdf1e2ee41bbd9fee3829fc20, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1 &465733845 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1214866912206994, guid: a06c92cfdf1e2ee41bbd9fee3829fc20,
+    type: 2}
+  m_PrefabInternal: {fileID: 465733844}
+--- !u!114 &465733846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 465733845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa4d351cd532bf46939b7e6cc2c2861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerIndex: 10
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  ItemLayer:
+    serializedVersion: 2
+    m_Bits: 8192
 --- !u!1 &575781654
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,6 +867,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114794134918639906, guid: a06c92cfdf1e2ee41bbd9fee3829fc20,
+        type: 2}
+      propertyPath: keyCodeList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4307333168997788, guid: a06c92cfdf1e2ee41bbd9fee3829fc20, type: 2}
       propertyPath: m_LocalPosition.x
       value: 5
@@ -882,7 +911,57 @@ Prefab:
     - target: {fileID: 114794134918639906, guid: a06c92cfdf1e2ee41bbd9fee3829fc20,
         type: 2}
       propertyPath: PlayerIndex
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114794134918639906, guid: a06c92cfdf1e2ee41bbd9fee3829fc20,
+        type: 2}
+      propertyPath: groundLayer.m_Bits
+      value: 4096
+      objectReference: {fileID: 0}
+    - target: {fileID: 114794134918639906, guid: a06c92cfdf1e2ee41bbd9fee3829fc20,
+        type: 2}
+      propertyPath: ItemLayer.m_Bits
+      value: 8192
+      objectReference: {fileID: 0}
+    - target: {fileID: 114794134918639906, guid: a06c92cfdf1e2ee41bbd9fee3829fc20,
+        type: 2}
+      propertyPath: keyCodeList.Array.data[0]
+      value: 119
+      objectReference: {fileID: 0}
+    - target: {fileID: 114794134918639906, guid: a06c92cfdf1e2ee41bbd9fee3829fc20,
+        type: 2}
+      propertyPath: keyCodeList.Array.data[1]
+      value: 97
+      objectReference: {fileID: 0}
+    - target: {fileID: 114794134918639906, guid: a06c92cfdf1e2ee41bbd9fee3829fc20,
+        type: 2}
+      propertyPath: keyCodeList.Array.data[2]
+      value: 115
+      objectReference: {fileID: 0}
+    - target: {fileID: 114794134918639906, guid: a06c92cfdf1e2ee41bbd9fee3829fc20,
+        type: 2}
+      propertyPath: keyCodeList.Array.data[3]
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114794134918639906, guid: a06c92cfdf1e2ee41bbd9fee3829fc20,
+        type: 2}
+      propertyPath: keyCodeList.Array.data[4]
+      value: 101
+      objectReference: {fileID: 0}
+    - target: {fileID: 114794134918639906, guid: a06c92cfdf1e2ee41bbd9fee3829fc20,
+        type: 2}
+      propertyPath: keyCodeList.Array.data[5]
+      value: 114
+      objectReference: {fileID: 0}
+    - target: {fileID: 114794134918639906, guid: a06c92cfdf1e2ee41bbd9fee3829fc20,
+        type: 2}
+      propertyPath: keyCodeList.Array.data[6]
+      value: 116
+      objectReference: {fileID: 0}
+    - target: {fileID: 114794134918639906, guid: a06c92cfdf1e2ee41bbd9fee3829fc20,
+        type: 2}
+      propertyPath: keyCodeList.Array.data[7]
+      value: 121
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a06c92cfdf1e2ee41bbd9fee3829fc20, type: 2}

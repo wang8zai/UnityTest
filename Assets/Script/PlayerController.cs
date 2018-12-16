@@ -17,4 +17,8 @@ public class PlayerController : MonoBehaviour {
 		else if(index == 1) return P2KeyCode;
 		else return new KeyCode[]{};
 	}
+
+	public int GetLength() {
+		return P1KeyCode.Length;
+	}
 }

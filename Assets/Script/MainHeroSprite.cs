@@ -41,8 +41,15 @@ public class MainHeroSprite : MonoBehaviour {
 	private KeyCode CRun;
 	private KeyCode CJump;
 
-	public Dictionary<KeyCode, bool> npcStateDic = new Dictionary<KeyCode, bool>();
-	enum getType : byte {getK, getKD};
+	protected List<bool> npcStateList = new List<bool>();
+	protected List<KeyCode> keyCodeList = new List<KeyCode>();
+	enum getType {getK, getKD};
+	enum keycodes {CUp = 0, CLeft, CDown, CRight, CSquat, CDrop, CRun, CJump};
+
+	public MainHeroSprite() {
+		// SetUpController();
+	}
+
 	// Use this for initialization
 	void Start () {
 		HeroAllAnimator = GetComponent<Animator>();
@@ -54,17 +61,19 @@ public class MainHeroSprite : MonoBehaviour {
 
 	void SetUpController() {
 		PController = new PlayerController();
-		KeyCode[] KC = PController.GetKeyCode(PlayerIndex);
-		CUp = KC[0];
-		CLeft = KC[1];
-		CDown = KC[2];
-		CRight = KC[3];
-		CSquat = KC[4];
-		CDrop = KC[5];
-		CRun = KC[6];
-		CJump = KC[7];
-		for(int i = 0; i < KC.Length; i++) {
-			npcStateDic[KC[i]] = false;
+		if(PlayerIndex < 10){
+			KeyCode[] KC = PController.GetKeyCode(PlayerIndex);
+			for(int i = (int)keycodes.CUp; i <= (int)keycodes.CJump; i++) {
+				keyCodeList.Add(KC[i]);
+				Debug.Log("init");
+				Debug.Log(KC[i]);
+				Debug.Log(i);
+			}
+		}
+		else{
+			for(int i = 0; i < PController.GetLength(); i++) {
+				npcStateList.Add(false);
+			}
 		}
 	}
 	
@@ -124,7 +133,7 @@ public class MainHeroSprite : MonoBehaviour {
 		if(rd2D.velocity.y < 0.0f && (!isItemGrounded && !isGrounded)) {
 			jumpState = 2;
 		}
-		if(InputTrigger(CJump, (byte)getType.getKD) && (isGrounded || isItemGrounded)) {
+		if(InputTrigger((int)keycodes.CJump, (int)getType.getKD) && (isGrounded || isItemGrounded)) {
 			rd2D.velocity = new Vector2(rd2D.velocity.x, 20.0f);
 			jumpState = 1;
 		}
@@ -193,7 +202,7 @@ public class MainHeroSprite : MonoBehaviour {
 	}
 
 	private void SetLowerState() {
-		if(InputTrigger(CRight, (byte)getType.getK)) {
+		if(InputTrigger((int)keycodes.CRight, (int)getType.getK)) {
 			if(!facingRight) {
 				Flip();
 				HeroAllAnimator.SetInteger("WalkState", 0);
@@ -202,13 +211,13 @@ public class MainHeroSprite : MonoBehaviour {
 			else {
 				HeroAllAnimator.SetInteger("WalkState", 10);
 				LowerState = 1;
-				if(InputTrigger(CRun, (byte)getType.getK)) {
+				if(InputTrigger((int)keycodes.CRun, (int)getType.getK)) {
 					HeroAllAnimator.SetInteger("WalkState", 15);
 					LowerState = 3;
 				}
 			}
 		}
-		else if(InputTrigger(CLeft, (byte)getType.getK)) {
+		else if(InputTrigger((int)keycodes.CLeft, (int)getType.getK)) {
 			if(facingRight) {
 				Flip();
 				HeroAllAnimator.SetInteger("WalkState", 0);
@@ -217,7 +226,7 @@ public class MainHeroSprite : MonoBehaviour {
 			else {
 				HeroAllAnimator.SetInteger("WalkState", 10);	
 				LowerState = 1;		
-				if(InputTrigger(CRun, (byte)getType.getK)) {
+				if(InputTrigger((int)keycodes.CRun, (int)getType.getK)) {
 					HeroAllAnimator.SetInteger("WalkState", 15);
 					LowerState = 3;
 				}	
@@ -231,7 +240,7 @@ public class MainHeroSprite : MonoBehaviour {
 
 	private void SetUpperState() {
 		if(UpperState == 0){
-			if(InputTrigger(CUp, (byte)getType.getK)){
+			if(InputTrigger((int)keycodes.CUp, (int)getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 10);
 			// }
 			// else if (!Input.GetKey(CUp) && !Input.GetKey(CDown)){
@@ -241,10 +250,10 @@ public class MainHeroSprite : MonoBehaviour {
 			}		
 		}
 		else if(UpperState == 1) {
-			if(InputTrigger(CUp, (byte)getType.getK)){
+			if(InputTrigger((int)keycodes.CUp, (int)getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 11);
 			}
-			else if(InputTrigger(CDown, (byte)getType.getK)){
+			else if(InputTrigger((int)keycodes.CDown, (int)getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 0);
 			}
 			else{
@@ -252,9 +261,9 @@ public class MainHeroSprite : MonoBehaviour {
 			}	
 		}
 		else if(UpperState == 2) {
-			if(InputTrigger(CUp, (byte)getType.getK)){
+			if(InputTrigger((int)keycodes.CUp, (int)getType.getK)){
 			}
-			else if(InputTrigger(CDown, (byte)getType.getK)){
+			else if(InputTrigger((int)keycodes.CDown, (int)getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 10);
 			}
 			else{
@@ -266,7 +275,7 @@ public class MainHeroSprite : MonoBehaviour {
 	}
 
 	private void SetSquatState() {
-		if(InputTrigger(CSquat, (byte)getType.getKD)) {
+		if(InputTrigger((int)keycodes.CSquat, (int)getType.getKD)) {
 			if(holdFlag) {
 				if(hingeJointToItem != null) {
 					Destroy(hingeJointToItem);
@@ -303,22 +312,22 @@ public class MainHeroSprite : MonoBehaviour {
 		collisionInt = collisionInt + i;
 	}
 
-	public bool InputTrigger(KeyCode kc, byte b) {
+	public bool InputTrigger(int kc, int b) {
 		if(PlayerIndex < 10) {
-			if(b == (byte)getType.getKD) return Input.GetKeyDown(kc);
-			return Input.GetKey(kc);
+			if(b == (int)getType.getKD) return Input.GetKeyDown(keyCodeList[kc]);
+			return Input.GetKey(keyCodeList[kc]);
 		}
 		else {
-			if(b == (byte)getType.getKD) {
-				bool rtn = npcStateDic[kc];
-				npcStateDic[kc] = false;
+			if(b == (int)getType.getKD) {
+				bool rtn = npcStateList[kc];
+				npcStateList[kc] = false;
 				return rtn;
 			}
-			return npcStateDic[kc];
+			return npcStateList[kc];
 		}
 	}
 
-	public void SetTrigger(KeyCode kc, bool t) {
-		npcStateDic[kc] = t;
+	public void SetTrigger(int kc, bool t) {
+		npcStateList[kc] = t;
 	}
 }
