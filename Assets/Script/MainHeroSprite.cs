@@ -30,7 +30,7 @@ public class MainHeroSprite : MonoBehaviour {
 	public LayerMask groundLayer;
 	public LayerMask ItemLayer;
 
-	private bool collisionFlag = false;
+	private int collisionInt = 0;
 
 	private KeyCode CUp;
 	private KeyCode CDown;
@@ -75,11 +75,11 @@ public class MainHeroSprite : MonoBehaviour {
 
 	private void UpdateMove() {
 		Vector3 targetVelocity = new Vector2(moveVelocity * LowerState * (facingRight==true?1:-1), rd2D.velocity.y);
-		if(!collisionFlag) {
-			rd2D.velocity = Vector3.SmoothDamp(rd2D.velocity, targetVelocity, ref refvelocity, 0.03f);
+		if(collisionInt == 0) {
+			rd2D.velocity = Vector3.SmoothDamp(rd2D.velocity, targetVelocity, ref refvelocity, 0.1f);
 		}
 		else {
-			collisionFlag = false;
+			collisionInt = collisionInt -1;
 		}
 	}
 
@@ -291,7 +291,7 @@ public class MainHeroSprite : MonoBehaviour {
  		transform.localScale = new Vector3((-1) * transform.localScale.x, transform.localScale.y, transform.localScale.z);
 	}
 
-	public void SetCollisionFlag(bool flag) {
-		collisionFlag = flag;
+	public void SetCollisionInt(int i) {
+		collisionInt = collisionInt + i;
 	}
 }

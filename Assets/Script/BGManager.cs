@@ -69,6 +69,10 @@ public class BGManager : MonoBehaviour {
 				type = 0;
 				flip = true;
 			}
+			if(RGInfoList.Count <= 2) {
+				type = 0;
+				flip = true;
+			}
 			GroundBasicInfo tempBInfo = GroundBasicInfoList[type];
 			string gname = tempBInfo.getGName();
 			GameObject obj = Instantiate(transform.Find(gname).gameObject, new Vector3(0,0,0), new Quaternion(0, 0, 0, 1), transform.Find("Ground"));
@@ -102,6 +106,11 @@ public class BGManager : MonoBehaviour {
 				type = 0;
 				flip = true;
 			}
+			if(LGInfoList.Count <= 2) {
+				type = 0;
+				flip = true;
+			}
+	
 			GroundBasicInfo tempBInfo = GroundBasicInfoList[type];
 			string gname = tempBInfo.getGName();
 			GameObject obj = Instantiate(transform.Find(gname).gameObject, new Vector3(0,0,0), new Quaternion(0, 0, 0, 1), transform.Find("Ground"));
