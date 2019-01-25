@@ -45,23 +45,7 @@ public class LeftLeg : Leg {
             else{
                 currentTime = 0;
             }
-        }
-        // float PID_P = 2500.0f;
-        // float PID_I = 200.0f;
-        // float PID_D = 200.0f;
-        // if (stopflag == false)
-        // {
-        //     if(directionflag == true)
-        //         PIDControl.SpeedXPID(25.0f, GetComponent<Rigidbody2D>(), PID_P, PID_I, PID_D, Time.deltaTime);
-        //     else
-        //         PIDControl.SpeedXPID(-25.0f, GetComponent<Rigidbody2D>(), PID_P, PID_I, PID_D, Time.deltaTime);
-        // }
-        // else
-        // {
-        //     PIDControl.SpeedXPID(0.0f, GetComponent<Rigidbody2D>(), PID_P, PID_I, PID_D, Time.deltaTime);
-        // }
-        
-
+        }  
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

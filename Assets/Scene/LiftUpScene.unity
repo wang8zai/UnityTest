@@ -607,7 +607,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 465733845}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffa4d351cd532bf46939b7e6cc2c2861, type: 3}
+  m_Script: {fileID: 11500000, guid: aee623b32c25967498428e58f4eaefb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerIndex: 10
@@ -962,6 +962,10 @@ Prefab:
         type: 2}
       propertyPath: keyCodeList.Array.data[7]
       value: 121
+      objectReference: {fileID: 0}
+    - target: {fileID: 1214866912206994, guid: a06c92cfdf1e2ee41bbd9fee3829fc20, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a06c92cfdf1e2ee41bbd9fee3829fc20, type: 2}

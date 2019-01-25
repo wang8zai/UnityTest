@@ -62,6 +62,7 @@
      <Compile Include="Assets\Script\Body.cs" />
      <Compile Include="Assets\Script\body_part.cs" />
      <Compile Include="Assets\Script\CameraManager.cs" />
+     <Compile Include="Assets\Script\CharacterManager.cs" />
      <Compile Include="Assets\Script\GameManager.cs" />
      <Compile Include="Assets\Script\Ground.cs" />
      <Compile Include="Assets\Script\HeroManager.cs" />

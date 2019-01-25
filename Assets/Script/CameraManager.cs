@@ -6,10 +6,28 @@ public class CameraManager : MonoBehaviour {
 
 	public List<GameObject> list = new List<GameObject>();
 	public GameObject CameraPrefab;
+	private static CameraManager instance = null;
+
+    public static CameraManager Instance {
+        get {
+            return instance;
+        }
+    }
+
+	public void Awake() {
+		if(instance == null) {
+            instance = this;
+			instance.Init();
+        }
+		else if(instance != this) {
+            Destroy(this);
+        }
+
+	}
 
 	public void Init() {
-		GameObject camera = Instantiate<GameObject>(CameraPrefab);
-		list.Add(camera);
+		// GameObject camera = Instantiate<GameObject>(CameraPrefab);
+		// list.Add(camera);
 	}
 
 	public GameObject Get(int index) {

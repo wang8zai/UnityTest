@@ -32,20 +32,6 @@ public class MainHeroSprite : MonoBehaviour {
 
 	private int collisionInt = 0;
 
-	private KeyCode CUp;
-	private KeyCode CDown;
-	private KeyCode CLeft;
-	private KeyCode CRight; 
-	private KeyCode CSquat;
-	private KeyCode CDrop;
-	private KeyCode CRun;
-	private KeyCode CJump;
-
-	protected List<bool> npcStateList = new List<bool>();
-	protected List<KeyCode> keyCodeList = new List<KeyCode>();
-	enum getType {getK, getKD};
-	enum keycodes {CUp = 0, CLeft, CDown, CRight, CSquat, CDrop, CRun, CJump};
-
 	public MainHeroSprite() {
 		// SetUpController();
 	}
@@ -60,25 +46,12 @@ public class MainHeroSprite : MonoBehaviour {
 	}
 
 	void SetUpController() {
-		PController = new PlayerController();
-		if(PlayerIndex < 10){
-			KeyCode[] KC = PController.GetKeyCode(PlayerIndex);
-			for(int i = (int)keycodes.CUp; i <= (int)keycodes.CJump; i++) {
-				keyCodeList.Add(KC[i]);
-				Debug.Log("init");
-				Debug.Log(KC[i]);
-				Debug.Log(i);
-			}
-		}
-		else{
-			for(int i = 0; i < PController.GetLength(); i++) {
-				npcStateList.Add(false);
-			}
-		}
+		PController = new PlayerController(PlayerIndex);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		PController.Update();
 		UpdateStates();
 		SetNewStates();
 	}
@@ -107,7 +80,6 @@ public class MainHeroSprite : MonoBehaviour {
 		Transform LeftHandTransform = transform.Find("Upper/LeftArmUpper/LeftArmLower/LeftHand");
 		if(catchFlag && !holdFlag){
 			Vector2 localpos = LeftHandTransform.position;
-			Debug.Log(localpos);
 			RaycastHit2D hit = Physics2D.Raycast(localpos, new Vector2(0, 1),Mathf.Infinity,ItemLayer);
 			if (hit.collider != null)
 			{
@@ -133,7 +105,7 @@ public class MainHeroSprite : MonoBehaviour {
 		if(rd2D.velocity.y < 0.0f && (!isItemGrounded && !isGrounded)) {
 			jumpState = 2;
 		}
-		if(InputTrigger((int)keycodes.CJump, (int)getType.getKD) && (isGrounded || isItemGrounded)) {
+		if(PController.InputTrigger((int)PlayerController.keycodes.CJump, (int)PlayerController.getType.getKD) && (isGrounded || isItemGrounded)) {
 			rd2D.velocity = new Vector2(rd2D.velocity.x, 20.0f);
 			jumpState = 1;
 		}
@@ -202,7 +174,7 @@ public class MainHeroSprite : MonoBehaviour {
 	}
 
 	private void SetLowerState() {
-		if(InputTrigger((int)keycodes.CRight, (int)getType.getK)) {
+		if(PController.InputTrigger((int)PlayerController.keycodes.CRight, (int)PlayerController.getType.getK)) {
 			if(!facingRight) {
 				Flip();
 				HeroAllAnimator.SetInteger("WalkState", 0);
@@ -211,13 +183,13 @@ public class MainHeroSprite : MonoBehaviour {
 			else {
 				HeroAllAnimator.SetInteger("WalkState", 10);
 				LowerState = 1;
-				if(InputTrigger((int)keycodes.CRun, (int)getType.getK)) {
+				if(PController.InputTrigger((int)PlayerController.keycodes.CRun, (int)PlayerController.getType.getK)) {
 					HeroAllAnimator.SetInteger("WalkState", 15);
 					LowerState = 3;
 				}
 			}
 		}
-		else if(InputTrigger((int)keycodes.CLeft, (int)getType.getK)) {
+		else if(PController.InputTrigger((int)PlayerController.keycodes.CLeft, (int)PlayerController.getType.getK)) {
 			if(facingRight) {
 				Flip();
 				HeroAllAnimator.SetInteger("WalkState", 0);
@@ -226,7 +198,7 @@ public class MainHeroSprite : MonoBehaviour {
 			else {
 				HeroAllAnimator.SetInteger("WalkState", 10);	
 				LowerState = 1;		
-				if(InputTrigger((int)keycodes.CRun, (int)getType.getK)) {
+				if(PController.InputTrigger((int)PlayerController.keycodes.CRun, (int)PlayerController.getType.getK)) {
 					HeroAllAnimator.SetInteger("WalkState", 15);
 					LowerState = 3;
 				}	
@@ -240,7 +212,7 @@ public class MainHeroSprite : MonoBehaviour {
 
 	private void SetUpperState() {
 		if(UpperState == 0){
-			if(InputTrigger((int)keycodes.CUp, (int)getType.getK)){
+			if(PController.InputTrigger((int)PlayerController.keycodes.CUp, (int)PlayerController.getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 10);
 			// }
 			// else if (!Input.GetKey(CUp) && !Input.GetKey(CDown)){
@@ -250,10 +222,10 @@ public class MainHeroSprite : MonoBehaviour {
 			}		
 		}
 		else if(UpperState == 1) {
-			if(InputTrigger((int)keycodes.CUp, (int)getType.getK)){
+			if(PController.InputTrigger((int)PlayerController.keycodes.CUp, (int)PlayerController.getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 11);
 			}
-			else if(InputTrigger((int)keycodes.CDown, (int)getType.getK)){
+			else if(PController.InputTrigger((int)PlayerController.keycodes.CDown, (int)PlayerController.getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 0);
 			}
 			else{
@@ -261,9 +233,9 @@ public class MainHeroSprite : MonoBehaviour {
 			}	
 		}
 		else if(UpperState == 2) {
-			if(InputTrigger((int)keycodes.CUp, (int)getType.getK)){
+			if(PController.InputTrigger((int)PlayerController.keycodes.CUp, (int)PlayerController.getType.getK)){
 			}
-			else if(InputTrigger((int)keycodes.CDown, (int)getType.getK)){
+			else if(PController.InputTrigger((int)PlayerController.keycodes.CDown, (int)PlayerController.getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 10);
 			}
 			else{
@@ -275,7 +247,7 @@ public class MainHeroSprite : MonoBehaviour {
 	}
 
 	private void SetSquatState() {
-		if(InputTrigger((int)keycodes.CSquat, (int)getType.getKD)) {
+		if(PController.InputTrigger((int)PlayerController.keycodes.CSquat, (int)PlayerController.getType.getKD)) {
 			if(holdFlag) {
 				if(hingeJointToItem != null) {
 					Destroy(hingeJointToItem);
@@ -290,7 +262,7 @@ public class MainHeroSprite : MonoBehaviour {
 			HeroAllAnimator.SetInteger("SquatState", 0);
 		}
 
-		if(Input.GetKeyDown(CDrop)) {
+		if(PController.InputTrigger((int)PlayerController.keycodes.CDrop, (int)PlayerController.getType.getKD)) {
 			ForceRunFlag = !ForceRunFlag;
 		}
 	}
@@ -310,24 +282,5 @@ public class MainHeroSprite : MonoBehaviour {
 
 	public void SetCollisionInt(int i) {
 		collisionInt = collisionInt + i;
-	}
-
-	public bool InputTrigger(int kc, int b) {
-		if(PlayerIndex < 10) {
-			if(b == (int)getType.getKD) return Input.GetKeyDown(keyCodeList[kc]);
-			return Input.GetKey(keyCodeList[kc]);
-		}
-		else {
-			if(b == (int)getType.getKD) {
-				bool rtn = npcStateList[kc];
-				npcStateList[kc] = false;
-				return rtn;
-			}
-			return npcStateList[kc];
-		}
-	}
-
-	public void SetTrigger(int kc, bool t) {
-		npcStateList[kc] = t;
 	}
 }

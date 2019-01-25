@@ -62,9 +62,9 @@ public class Back_Ground : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ////////////////////////////////////////////
+        // //////////////////////////////////////////
         //build ground unit
-        ////////////////////////////////////////////        
+        // //////////////////////////////////////////        
         //Debug.Log("Scroll Start " + ScrollStart);
 
 
@@ -83,9 +83,9 @@ public class Back_Ground : MonoBehaviour
             
         //        Debug.Log("Bridege size " + BridgeSize);
 
-        ////////////////////////////////////////////
+        // //////////////////////////////////////////
         // build bridge 
-        ////////////////////////////////////////////
+        // //////////////////////////////////////////
 /*
         if (ScrollStart <= Body.transform.position.x + BridgeSize.x / 2)
         {

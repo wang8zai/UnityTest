@@ -16,7 +16,6 @@ public class HeroManager : MonoBehaviour
 
     public void Start()
     {
-        print("Body Manager Start");
     }
 
     public GameObject Get(int index)
