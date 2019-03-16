@@ -6,8 +6,18 @@ public class Back_GroundManager : MonoBehaviour {
 	public static List<GameObject> BGInstance;
 	public GameObject CameraPrefab;		// need to update to assign into this value
 	public GameObject BGPrefab;
-	
-	public void Get() {
+
+    private static Back_GroundManager instance = null;
+
+    public static Back_GroundManager Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+
+    public void Get() {
 	}
 
 	public void InitBG() {

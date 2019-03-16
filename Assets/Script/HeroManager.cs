@@ -7,7 +7,15 @@ public class HeroManager : MonoBehaviour
     public GameObject MainHeroGameObject;
     private List<GameObject> BodyList = new List<GameObject>();
 
+    private static HeroManager instance = null;
 
+    public static HeroManager Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
 
     protected int gravityScale = 5;
 
