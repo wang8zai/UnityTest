@@ -38,3 +38,8 @@ sysinfo.txt
 
 # Crashlytics generated file
 Assets/StreamingAssets/crashlytics-build.properties
+*.info
+*.mdb
+*.log
+*.log
+Library/metadata/*
