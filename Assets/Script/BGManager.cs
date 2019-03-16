@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class BGManager : MonoBehaviour {
-
+public class BGManager : ScriptableObject {
 	private List<List<GameObject>> ObjPools;
 	private float LeftBounder = 0;
 	private float RightBounder = 0;
@@ -12,11 +11,18 @@ public class BGManager : MonoBehaviour {
 	private float cHeight = 0;
 	private Camera c;
 	private Vector3 Origin = new Vector3(0, 5, 0);
+	private Quaternion OriginRotation = Quaternion.identity;
+
+	private string GroundBaseName = "Ground";    // name of the grond 
+	private GameObject GroundBaseObj = null;     // all ground objects should be placed under this gobj
+
+	private string SceneBaseName = "Scene";
+	private GameObject SceneBaseObj = null; 
 
 	private int GroundTypeCnt = 3;
-	private string GroundPrefix = "Ground/Gd_";
+	private string GroundPrefix = "Prefab/Ground/Gd_";
 	private int SceneItemCnt = 2;
-	private string ScenePrefix = "Scene/Sc_";
+	private string ScenePrefix = "Prefab/Scene/Sc_";
 	// store the basic info about each kind of ground block
 	private List<GroundBasicInfo> GroundBasicInfoList;
 	private List<GroundInfo> RGInfoList;
@@ -29,8 +35,12 @@ public class BGManager : MonoBehaviour {
 		public GameObject GObj;
 	}
 
-	// Use this for initialization
-	void Start () {
+	public void Awake() {
+		Init();
+	}
+
+	private void Init() {
+		Debug.Log("BG Init");
 		c = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
 		cHeight = c.orthographicSize;
 		cWidth = c.aspect * cHeight;
@@ -41,8 +51,16 @@ public class BGManager : MonoBehaviour {
 		LGInfoList = new List<GroundInfo>();
 		SceneItemBasicInfoList = new List<SceneItemBasicInfo>();
 		SIInfoList = new List<SceneItemInfo>();
+		InitBaseObj();
 		InitBasicGroundInfo();
 		InitBasicSceneItemInfo();
+	}
+
+
+
+	// Use this for initialization
+	void Start () {
+
 	}
 	
 	// Update is called once per frame
@@ -53,7 +71,7 @@ public class BGManager : MonoBehaviour {
 			int type = 0;
 			GroundBasicInfo tempBInfo = GroundBasicInfoList[type];
 			string gname = tempBInfo.getGName();
-			GameObject obj = Instantiate(transform.Find(gname).gameObject, new Vector3(0,0,0), new Quaternion(0, 0, 0, 1), transform.Find("Ground"));
+			GameObject obj = ResourceLoader.LoadPrefab(gname, Origin, OriginRotation, GroundBaseObj, true);
 			obj.transform.localPosition = Origin;
 			obj.SetActive(true);
 			RightBounder = RightBounder + tempBInfo.rightEdge.x;
@@ -75,7 +93,7 @@ public class BGManager : MonoBehaviour {
 			}
 			GroundBasicInfo tempBInfo = GroundBasicInfoList[type];
 			string gname = tempBInfo.getGName();
-			GameObject obj = Instantiate(transform.Find(gname).gameObject, new Vector3(0,0,0), new Quaternion(0, 0, 0, 1), transform.Find("Ground"));
+			GameObject obj = ResourceLoader.LoadPrefab(gname, Origin, OriginRotation, GroundBaseObj, true);
 			Vector2 newLeftEdge;
 			Vector2 newOrigin;
 			Vector2 newRightEdge;
@@ -113,7 +131,7 @@ public class BGManager : MonoBehaviour {
 	
 			GroundBasicInfo tempBInfo = GroundBasicInfoList[type];
 			string gname = tempBInfo.getGName();
-			GameObject obj = Instantiate(transform.Find(gname).gameObject, new Vector3(0,0,0), new Quaternion(0, 0, 0, 1), transform.Find("Ground"));
+			GameObject obj = ResourceLoader.LoadPrefab(gname, Origin, OriginRotation, GroundBaseObj, true);
 			Vector2 newLeftEdge;
 			Vector2 newOrigin;
 			Vector2 newRightEdge;
@@ -138,10 +156,16 @@ public class BGManager : MonoBehaviour {
 		}
 	}
 
+	// init base gournd obj. all ground objects will be loaded on this object.
+	public void InitBaseObj() {
+		GroundBaseObj = new GameObject(GroundBaseName);
+		SceneBaseObj = new GameObject(SceneBaseName);
+	}
+
 	public void InitBasicGroundInfo() {
 		for(int i = 0; i < GroundTypeCnt; i++) {
 			string GroundName = GroundPrefix + (i+1).ToString();
-			GameObject GroundGObj = transform.Find(GroundName).gameObject;
+			GameObject GroundGObj = ResourceLoader.LoadPrefab(GroundName, Origin, OriginRotation, GroundBaseObj, true);
 			if(GroundGObj.GetComponent<BoxCollider2D>() != null) {
 				BoxCollider2D TempBoxCollider2D = GroundGObj.GetComponent<BoxCollider2D>();
 				float top = TempBoxCollider2D.offset.y + (TempBoxCollider2D.size.y / 2f);
@@ -179,7 +203,7 @@ public class BGManager : MonoBehaviour {
 	public void InitBasicSceneItemInfo() {
 		for(int i = 0; i < SceneItemCnt; i++) {
 			string SIName = ScenePrefix + (i+1).ToString();
-			GameObject SIGObj = transform.Find(SIName).gameObject;
+			GameObject SIGObj = ResourceLoader.LoadPrefab(SIName, Origin, OriginRotation, GroundBaseObj, false);
 			if(SIGObj.GetComponent<CircleCollider2D>() != null) {
 				CircleCollider2D Temp = SIGObj.GetComponent<CircleCollider2D>();
 				float top = Temp.offset.y + Temp.radius;
@@ -225,7 +249,8 @@ public class BGManager : MonoBehaviour {
 	public void AddSceneItem(Vector2 vl, Vector2 vr, int index) {
 		float ybtm = Mathf.Max(vl.y, vr.y);
 		float xpos = Random.Range(vl.x, vr.x);
-		GameObject gobj = Instantiate(transform.Find(SceneItemBasicInfoList[index].SIName).gameObject, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 1), transform.Find("Scene"));
+		string SIName = ScenePrefix + (index+1).ToString();
+		GameObject gobj = ResourceLoader.LoadPrefab(SIName, Origin, OriginRotation, SceneBaseObj, true);
 		gobj.transform.localPosition = new Vector3(xpos, ybtm - 2 * SceneItemBasicInfoList[index].RBVector.y, 0);
 		gobj.SetActive(true);
 	}
@@ -249,7 +274,7 @@ public class SceneItemBasicInfo : BGManager {
 public class SceneItemInfo: BGManager {
 }
 
-public class GroundBasicInfo : BGManager{
+public class GroundBasicInfo : ScriptableObject{
 	public Vector2 leftEdge;
 	public Vector2 rightEdge;
 	public string GName;

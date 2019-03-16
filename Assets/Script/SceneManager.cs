@@ -5,20 +5,23 @@ using UnityEngine;
 public class SceneManager : ScriptableObject
 {
 //    public GameObject MainHero;
-    private static SceneManager instance;
-    public static SceneManager Instance {
-        get {
-            return instance;
-        }
-    }
+    // private static SceneManager instance;
+    // public static SceneManager Instance {
+    //     get {
+    //         Debug.Log("SceneManager Get");
+    //         return instance;
+    //     }
+    // }
     public void Awake() {
-        if(instance == null) {
-            instance = this;
-            instance.Init();
-        }
-        else if(instance != this) {
-            Destroy(this);
-        }
+        Debug.Log("SceneManager Awake");
+        Init();
+        // if(instance == null) {
+        //     instance = this;
+        //     instance.Init();
+        // }
+        // else if(instance != this) {
+        //     Destroy(this);
+        // }
         // CManagerScript.Init();
         // GameObject MainCamera = CManagerScript.Get(0);
 

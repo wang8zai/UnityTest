@@ -2,32 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour {
+public class CameraManager : ScriptableObject {
 
 	public List<GameObject> list = new List<GameObject>();
 	public GameObject CameraPrefab;
-	private static CameraManager instance = null;
-
-    public static CameraManager Instance {
-        get {
-            return instance;
-        }
-    }
 
 	public void Awake() {
-		if(instance == null) {
-            instance = this;
-			instance.Init();
-        }
-		else if(instance != this) {
-            Destroy(this);
-        }
-
+		Init();
 	}
 
 	public void Init() {
-		// GameObject camera = Instantiate<GameObject>(CameraPrefab);
-		// list.Add(camera);
+		Debug.Log("camera Init");
+		GameObject cameraPrefab = Resources.Load<GameObject>("Prefab/camera");
+		GameObject cameraClone = Instantiate(cameraPrefab, new Vector3(0,0,0), Quaternion.identity);
+		cameraClone.SetActive(true);
+		list.Add(cameraClone);
 	}
 
 	public GameObject Get(int index) {

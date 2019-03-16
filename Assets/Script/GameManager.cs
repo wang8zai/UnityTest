@@ -4,27 +4,28 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
     private static GameManager instance = null;
-    // private SceneManager sceneManager;
-    // private HeroManager characterManager;
-    // private Back_GroundManager backGroundManager;
-    // private CameraManager cameraManager;
+    private SceneManager sceneManager;
+    private HeroManager characterManager;
+    private BGManager backGroundManager;
+    private CameraManager cameraManager;
     public void Awake()
     {
         if(instance == null) {
             instance = this;
+            Init();
         }
         else if(instance != this) {
             Destroy(this.gameObject);
         }
-        Init();
+
         DontDestroyOnLoad(this.gameObject);
     }
-
     public void Init()
     {
-        SceneManager sceneManager = SceneManager.Instance;
-        CameraManager cameraManager = CameraManager.Instance;
-        Back_GroundManager backGroundManager = Back_GroundManager.Instance;
-        HeroManager heroManager = HeroManager.Instance;
+        Debug.Log("start Init");
+        sceneManager = new SceneManager();
+        cameraManager = new CameraManager();
+        backGroundManager = new BGManager();
+        characterManager = new HeroManager();
     }
 }

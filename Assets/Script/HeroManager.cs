@@ -7,6 +7,10 @@ public class HeroManager : MonoBehaviour
     public GameObject MainHeroGameObject;
     private List<GameObject> BodyList = new List<GameObject>();
 
+    public void Awake() {
+        Init();
+    }
+
 
 
     protected int gravityScale = 5;
@@ -14,7 +18,7 @@ public class HeroManager : MonoBehaviour
     protected int[] bodypid = {50, 3, 0};
     protected int[] legpid = {35, 3, 0};
 
-    public void Start()
+    public void Init()
     {
     }
 
