@@ -1,7 +1,0 @@
-sceneSetups:
-- path: Assets/Scene/EntryScene.unity
-  isLoaded: 1
-  isActive: 1
-- path: Assets/Scene/LiftUpScene.unity
-  isLoaded: 0
-  isActive: 0
