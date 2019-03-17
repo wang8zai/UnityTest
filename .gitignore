@@ -43,3 +43,4 @@ Assets/StreamingAssets/crashlytics-build.properties
 *.log
 *.log
 Library/metadata/*
+Assembly-CSharp.csproj

@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Linq;
 
 public class BGManager : ScriptableObject {
+	private GameManager gameManager = null;
+
 	private List<List<GameObject>> ObjPools;
 	private float LeftBounder = 0;
 	private float RightBounder = 0;
@@ -21,6 +23,7 @@ public class BGManager : ScriptableObject {
 
 	private int GroundTypeCnt = 3;
 	private string GroundPrefix = "Prefab/Ground/Gd_";
+	// private string GourndDirPrefex = "Prefab/Ground/";
 	private int SceneItemCnt = 2;
 	private string ScenePrefix = "Prefab/Scene/Sc_";
 	// store the basic info about each kind of ground block
@@ -35,12 +38,14 @@ public class BGManager : ScriptableObject {
 		public GameObject GObj;
 	}
 
+	// This function get automated called when any scriptableObject method is called.
 	public void Awake() {
-		Init();
 	}
 
-	private void Init() {
+	// Init bg manager info. Call for once.
+	public void Init(GameManager gm) {
 		Debug.Log("BG Init");
+		gameManager = gm;
 		c = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
 		cHeight = c.orthographicSize;
 		cWidth = c.aspect * cHeight;
@@ -55,16 +60,9 @@ public class BGManager : ScriptableObject {
 		InitBasicGroundInfo();
 		InitBasicSceneItemInfo();
 	}
-
-
-
-	// Use this for initialization
-	void Start () {
-
-	}
 	
-	// Update is called once per frame
-	void Update () {
+	// Update is called once per frame. Called by GameManager update.
+	public void Update () {
 		float cXPos = c.transform.localPosition.x;
 		int ObjIndex = 0;
 		if(LeftBounder == RightBounder) {
@@ -76,8 +74,14 @@ public class BGManager : ScriptableObject {
 			obj.SetActive(true);
 			RightBounder = RightBounder + tempBInfo.rightEdge.x;
 			LeftBounder = LeftBounder + tempBInfo.leftEdge.x;
-			RGInfoList.Add(new GroundInfo(0,type,GroundBasicInfoList[0].leftEdge + (Vector2)Origin, GroundBasicInfoList[0].rightEdge + (Vector2)Origin, Origin, obj));
-			LGInfoList.Add(new GroundInfo(0,type,GroundBasicInfoList[0].leftEdge + (Vector2)Origin, GroundBasicInfoList[0].rightEdge + (Vector2)Origin, Origin, obj));
+
+			GroundInfo rginfo = ScriptableObject.CreateInstance<GroundInfo>();
+			rginfo.Init(0,type,GroundBasicInfoList[0].leftEdge + (Vector2)Origin, GroundBasicInfoList[0].rightEdge + (Vector2)Origin, Origin, obj);
+			RGInfoList.Add(rginfo);
+
+			GroundInfo lginfo = ScriptableObject.CreateInstance<GroundInfo>();
+			lginfo.Init(0,type,GroundBasicInfoList[0].leftEdge + (Vector2)Origin, GroundBasicInfoList[0].rightEdge + (Vector2)Origin, Origin, obj);
+			LGInfoList.Add(lginfo);			
 		}
 		while(cXPos + cWidth >= RightBounder) {
 			int type = Random.Range(0, GroundTypeCnt);
@@ -109,7 +113,11 @@ public class BGManager : ScriptableObject {
 				newRightEdge = new Vector2(newOrigin.x - tempBInfo.leftEdge.x, newOrigin.y + tempBInfo.leftEdge.y);
 			}
 			obj.transform.localPosition = newOrigin;
-			RGInfoList.Add(new GroundInfo(0,type,newLeftEdge, newRightEdge, newOrigin, obj));
+
+			GroundInfo rginfo = ScriptableObject.CreateInstance<GroundInfo>();
+			rginfo.Init(0,type,newLeftEdge, newRightEdge, newOrigin, obj);
+			RGInfoList.Add(rginfo);
+
 			obj.SetActive(true);
 
 			AddSceneItem(newLeftEdge, newRightEdge, Random.Range(0, SceneItemCnt));
@@ -130,7 +138,7 @@ public class BGManager : ScriptableObject {
 			}
 	
 			GroundBasicInfo tempBInfo = GroundBasicInfoList[type];
-			string gname = tempBInfo.getGName();
+			string gname =  tempBInfo.getGName();
 			GameObject obj = ResourceLoader.LoadPrefab(gname, Origin, OriginRotation, GroundBaseObj, true);
 			Vector2 newLeftEdge;
 			Vector2 newOrigin;
@@ -147,7 +155,11 @@ public class BGManager : ScriptableObject {
 				newLeftEdge = new Vector2(newOrigin.x - tempBInfo.rightEdge.x, newOrigin.y + tempBInfo.rightEdge.y);
 			}
 			obj.transform.localPosition = newOrigin;
-			LGInfoList.Add(new GroundInfo(0, type, newLeftEdge, newRightEdge, newOrigin, obj));
+
+			GroundInfo lginfo = ScriptableObject.CreateInstance<GroundInfo>();
+			lginfo.Init(0, type, newLeftEdge, newRightEdge, newOrigin, obj);
+			LGInfoList.Add(lginfo);
+
 			obj.SetActive(true);
 
 			AddSceneItem(newLeftEdge, newRightEdge, Random.Range(0, SceneItemCnt));
@@ -172,7 +184,9 @@ public class BGManager : ScriptableObject {
 				float btm = TempBoxCollider2D.offset.y - (TempBoxCollider2D.size.y / 2f);
 				float left = TempBoxCollider2D.offset.x - (TempBoxCollider2D.size.x / 2f);
 				float right = TempBoxCollider2D.offset.x + (TempBoxCollider2D.size.x /2f);
-				GroundBasicInfoList.Add(new GroundBasicInfo(new Vector2(left, top), new Vector2(right, top), GroundName));
+				GroundBasicInfo gbinfo = ScriptableObject.CreateInstance<GroundBasicInfo>();
+				gbinfo.Init(new Vector2(left, top), new Vector2(right, top), GroundName);
+				GroundBasicInfoList.Add(gbinfo);
 			}
 			else if(GroundGObj.GetComponent<PolygonCollider2D>()!=null){
 				PolygonCollider2D TempPolygonCollider2D = GroundGObj.GetComponent<PolygonCollider2D>();
@@ -193,7 +207,9 @@ public class BGManager : ScriptableObject {
 					rightTop = Mathf.Max(rightTop, sortedPoints[index].y);
 					index = index - 1;
 				}
-				GroundBasicInfoList.Add(new GroundBasicInfo(new Vector2(left, leftTop), new Vector2(right, rightTop), GroundName));
+				GroundBasicInfo gbinfo = ScriptableObject.CreateInstance<GroundBasicInfo>();
+				gbinfo.Init(new Vector2(left, leftTop), new Vector2(right, rightTop), GroundName);
+				GroundBasicInfoList.Add(gbinfo);
 			}
 			else {
 			}
@@ -203,14 +219,16 @@ public class BGManager : ScriptableObject {
 	public void InitBasicSceneItemInfo() {
 		for(int i = 0; i < SceneItemCnt; i++) {
 			string SIName = ScenePrefix + (i+1).ToString();
-			GameObject SIGObj = ResourceLoader.LoadPrefab(SIName, Origin, OriginRotation, GroundBaseObj, false);
+			GameObject SIGObj = ResourceLoader.LoadPrefab(SIName, Origin, OriginRotation, SceneBaseObj, true);
 			if(SIGObj.GetComponent<CircleCollider2D>() != null) {
 				CircleCollider2D Temp = SIGObj.GetComponent<CircleCollider2D>();
 				float top = Temp.offset.y + Temp.radius;
 				float btm = Temp.offset.y - Temp.radius;
 				float left = Temp.offset.x - Temp.radius;
 				float right = Temp.offset.x + Temp.radius;
-				SceneItemBasicInfoList.Add(new SceneItemBasicInfo(new Vector2(left, top), new Vector2(right, btm), SIName));
+				SceneItemBasicInfo scItemBasicInfo = ScriptableObject.CreateInstance<SceneItemBasicInfo>();
+				scItemBasicInfo.Init(new Vector2(left, top), new Vector2(right, btm), SIName);
+				SceneItemBasicInfoList.Add(scItemBasicInfo);
 			}
 			else if(SIGObj.GetComponent<BoxCollider2D>() != null) {
 				BoxCollider2D TempBoxCollider2D = SIGObj.GetComponent<BoxCollider2D>();
@@ -218,7 +236,9 @@ public class BGManager : ScriptableObject {
 				float btm = TempBoxCollider2D.offset.y - (TempBoxCollider2D.size.y / 2f);
 				float left = TempBoxCollider2D.offset.x - (TempBoxCollider2D.size.x / 2f);
 				float right = TempBoxCollider2D.offset.x + (TempBoxCollider2D.size.x /2f);
-				SceneItemBasicInfoList.Add(new SceneItemBasicInfo(new Vector2(left, top), new Vector2(right, btm), SIName));
+				SceneItemBasicInfo scItemBasicInfo = ScriptableObject.CreateInstance<SceneItemBasicInfo>();
+				scItemBasicInfo.Init(new Vector2(left, top), new Vector2(right, btm), SIName);
+				SceneItemBasicInfoList.Add(scItemBasicInfo);
 			}
 			else if(SIGObj.GetComponent<PolygonCollider2D>()!=null){
 				PolygonCollider2D TempPolygonCollider2D = SIGObj.GetComponent<PolygonCollider2D>();
@@ -239,10 +259,13 @@ public class BGManager : ScriptableObject {
 					rightBtm = Mathf.Min(rightBtm, sortedPoints[index].y);
 					index = index - 1;
 				}
-				SceneItemBasicInfoList.Add(new SceneItemBasicInfo(new Vector2(left, leftTop), new Vector2(right, rightBtm), SIName));
+				SceneItemBasicInfo scItemBasicInfo = ScriptableObject.CreateInstance<SceneItemBasicInfo>();
+				scItemBasicInfo.Init(new Vector2(left, leftTop), new Vector2(right, rightBtm), SIName);
+				SceneItemBasicInfoList.Add(scItemBasicInfo);
 			}
 			else {
 			}
+ 
 		}
 	}
 
@@ -260,11 +283,11 @@ public class BGManager : ScriptableObject {
 	}
 }
 
-public class SceneItemBasicInfo : BGManager {
+public class SceneItemBasicInfo : ScriptableObject {
 	public string SIName;
 	public Vector2 LTVector;
 	public Vector2 RBVector;
-	public SceneItemBasicInfo(Vector2 lt, Vector2 rb, string name) {
+	public void Init(Vector2 lt, Vector2 rb, string name) {
 		SIName = name;
 		LTVector = lt;
 		RBVector = rb;
@@ -278,7 +301,7 @@ public class GroundBasicInfo : ScriptableObject{
 	public Vector2 leftEdge;
 	public Vector2 rightEdge;
 	public string GName;
-	public GroundBasicInfo(Vector2 left, Vector2 right, string gname) {
+	public void Init(Vector2 left, Vector2 right, string gname) {
 		leftEdge = left;
 		rightEdge = right;
 		GName = gname;
@@ -296,7 +319,7 @@ public class GroundInfo : BGManager {
 	public Vector2 rightEdge;
 	public Vector2 offset;
 	public GameObject GObj;
-	public GroundInfo(int idx, int t, Vector2 l, Vector2 r, Vector2 o, GameObject G) {
+	public void Init(int idx, int t, Vector2 l, Vector2 r, Vector2 o, GameObject G) {
 		index = idx;
 		type = t;
 		leftEdge = l;

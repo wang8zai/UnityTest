@@ -4,10 +4,23 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
     private static GameManager instance = null;
-    private SceneManager sceneManager;
-    private HeroManager characterManager;
-    private BGManager backGroundManager;
-    private CameraManager cameraManager;
+    public SceneManager sceneManager;
+    public CharacterManager characterManager;
+    public BGManager backGroundManager;
+    public CameraManager cameraManager;
+    public ItemManager itemManager;
+    public GameManager Get()
+    {
+        if(instance == null)
+        {
+            instance = new GameManager();
+        }
+        else if(instance != this)
+        {
+            instance = this;
+        }
+        return instance;
+    }
     public void Awake()
     {
         if(instance == null) {
@@ -23,9 +36,25 @@ public class GameManager : MonoBehaviour {
     public void Init()
     {
         Debug.Log("start Init");
-        sceneManager = new SceneManager();
-        cameraManager = new CameraManager();
-        backGroundManager = new BGManager();
-        characterManager = new HeroManager();
+        sceneManager = ScriptableObject.CreateInstance<SceneManager>();
+        sceneManager.Init(this);
+        cameraManager = ScriptableObject.CreateInstance<CameraManager>();
+        cameraManager.Init(this);
+        backGroundManager = ScriptableObject.CreateInstance<BGManager>();
+        backGroundManager.Init(this);
+        characterManager = ScriptableObject.CreateInstance<CharacterManager>();
+        characterManager.Init(this);
+        itemManager = ScriptableObject.CreateInstance<ItemManager>();
+        itemManager.Init(this);
+        SetCharacterCamera(0, 0);
+    }
+    public void Update()
+    {
+        backGroundManager.Update();
+    }
+
+    private void SetCharacterCamera(int cameraIndex, int characterIndex)
+    {
+        cameraManager.SetCharacter(cameraIndex, characterIndex);
     }
 }

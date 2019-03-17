@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class CameraManager : ScriptableObject {
 
+	private GameManager gameManager = null;
 	public List<GameObject> list = new List<GameObject>();
 	public GameObject CameraPrefab;
 
 	public void Awake() {
-		Init();
+		// Init();
 	}
 
-	public void Init() {
+	public void Init(GameManager gm) {
 		Debug.Log("camera Init");
-		GameObject cameraPrefab = Resources.Load<GameObject>("Prefab/camera");
-		GameObject cameraClone = Instantiate(cameraPrefab, new Vector3(0,0,0), Quaternion.identity);
+		gameManager = gm;
+		GameObject cameraPrefab = Resources.Load<GameObject>("Prefab/Camera/MainCamera");
+		GameObject cameraClone = Instantiate(cameraPrefab, new Vector3(0, 7,-10), Quaternion.identity);
+		//GameObject cameraClone = Instantiate(cameraPrefab);
 		cameraClone.SetActive(true);
 		list.Add(cameraClone);
 	}
@@ -23,8 +26,8 @@ public class CameraManager : ScriptableObject {
 		return list[index];
 	}
 
-	public void SetMainHero(GameObject MainHero) {
-		list[0].GetComponent<MainCamera>().SetMainHero(MainHero);
+	public void SetCharacter(int cameraIndex, int characterIndex) {
+		list[cameraIndex].GetComponent<MainCamera>().SetCharacter(gameManager.characterManager.Get(characterIndex));
 	}
 
 	public void SetScriptActive() {

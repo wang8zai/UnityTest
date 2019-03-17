@@ -66,6 +66,7 @@
      <Compile Include="Assets\Script\GameManager.cs" />
      <Compile Include="Assets\Script\Ground.cs" />
      <Compile Include="Assets\Script\HeroManager.cs" />
+     <Compile Include="Assets\Script\ItemManager.cs" />
      <Compile Include="Assets\Script\LeftArm.cs" />
      <Compile Include="Assets\Script\LeftLeg.cs" />
      <Compile Include="Assets\Script\Leg.cs" />

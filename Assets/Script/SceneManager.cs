@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SceneManager : ScriptableObject
 {
+    private GameManager gameManager = null;
 //    public GameObject MainHero;
     // private static SceneManager instance;
     // public static SceneManager Instance {
@@ -14,7 +15,7 @@ public class SceneManager : ScriptableObject
     // }
     public void Awake() {
         Debug.Log("SceneManager Awake");
-        Init();
+        // Init();
         // if(instance == null) {
         //     instance = this;
         //     instance.Init();
@@ -34,7 +35,7 @@ public class SceneManager : ScriptableObject
         // BGManagerScript.SetMainHero(HeroObj);
         // CManagerScript.SetScriptActive();
     }
-    public void Init() {
-
+    public void Init(GameManager gm) {
+        gameManager = gm;
     }
 }

@@ -24,7 +24,7 @@ public class MainCamera : MonoBehaviour {
         }  
 	}
 
-    public void SetMainHero(GameObject GObj) {
+    public void SetCharacter(GameObject GObj) {
         MainHero = GObj;
     }
 }

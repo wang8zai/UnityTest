@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeroManager : MonoBehaviour
+public class HeroManager : ScriptableObject
 {
     public GameObject MainHeroGameObject;
     private List<GameObject> BodyList = new List<GameObject>();
 
     public void Awake() {
-        Init();
     }
 
 
