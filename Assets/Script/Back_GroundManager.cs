@@ -2,39 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Back_GroundManager : MonoBehaviour {
-	public static List<GameObject> BGInstance;
+public class Back_GroundManager : ScriptableObject {
+	private static Back_GroundManager instance;
+
+	private List<GameObject> BGInstance;
 	public GameObject CameraPrefab;		// need to update to assign into this value
 	public GameObject BGPrefab;
-
-    private static Back_GroundManager instance = null;
-
-    public static Back_GroundManager Instance
-    {
-        get
-        {
+	
+    public static Back_GroundManager Instance {
+        get {
             return instance;
         }
     }
-
-    public void Get() {
+    public void Awake() {
+        if(instance == null) {
+            instance = this;
+            instance.Init();
+        }
+        else if(instance != this) {
+            Destroy(this);
+        }
 	}
 
-	public void InitBG() {
-		if(BGInstance == null) {
-			BGInstance = new List<GameObject>();
-		}
+	public void Init() {
+		BGInstance = new List<GameObject>();
 		BGInstance.Add(Instantiate<GameObject>(BGPrefab));
 
 //		BGInstance[0].Init();
 //		BGInstance[0].Get().GetComponent<Camera>
 		BGInstance[0].SetActive(true);
-		print(BGInstance.Count);
+		// print(BGInstance.Count);
 	}
 
 	public void SetCamera(GameObject CameraObj) {
 		CameraPrefab = CameraObj;
-		print(BGInstance.Count);
+		// print(BGInstance.Count);
 		for(int i=0; i < BGInstance.Count; i++) {
 			BGInstance[i].GetComponent<Back_Ground>().SetCamera(CameraPrefab);
 		}

@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeroManager : MonoBehaviour
+public class HeroManager : ScriptableObject
 {
     public GameObject MainHeroGameObject;
     private List<GameObject> BodyList = new List<GameObject>();
 
-    private static HeroManager instance = null;
+    public void Awake() {
+    }
+
 
     public static HeroManager Instance
     {
@@ -22,7 +24,7 @@ public class HeroManager : MonoBehaviour
     protected int[] bodypid = {50, 3, 0};
     protected int[] legpid = {35, 3, 0};
 
-    public void Start()
+    public void Init()
     {
     }
 
