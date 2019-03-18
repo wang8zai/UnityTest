@@ -11,13 +11,13 @@ public class HeroManager : ScriptableObject
     }
 
 
-    public static HeroManager Instance
-    {
-        get
-        {
-            return instance;
-        }
-    }
+    // public static HeroManager Instance
+    // {
+    //     get
+    //     {
+    //         return instance;
+    //     }
+    // }
 
     protected int gravityScale = 5;
 
