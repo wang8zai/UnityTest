@@ -2,40 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour {
+public class CameraManager : ScriptableObject {
 
+	private GameManager gameManager = null;
 	public List<GameObject> list = new List<GameObject>();
 	public GameObject CameraPrefab;
-	private static CameraManager instance = null;
-
-    public static CameraManager Instance {
-        get {
-            return instance;
-        }
-    }
 
 	public void Awake() {
-		if(instance == null) {
-            instance = this;
-			instance.Init();
-        }
-		else if(instance != this) {
-            Destroy(this);
-        }
-
+		// Init();
 	}
 
-	public void Init() {
-		// GameObject camera = Instantiate<GameObject>(CameraPrefab);
-		// list.Add(camera);
+	public void Init(GameManager gm) {
+		Debug.Log("camera Init");
+		gameManager = gm;
+		GameObject cameraPrefab = Resources.Load<GameObject>("Prefab/Camera/MainCamera");
+		GameObject cameraClone = Instantiate(cameraPrefab, new Vector3(0, 7,-10), Quaternion.identity);
+		//GameObject cameraClone = Instantiate(cameraPrefab);
+		cameraClone.SetActive(true);
+		list.Add(cameraClone);
 	}
 
 	public GameObject Get(int index) {
 		return list[index];
 	}
 
-	public void SetMainHero(GameObject MainHero) {
-		list[0].GetComponent<MainCamera>().SetMainHero(MainHero);
+	public void SetCharacter(int cameraIndex, int characterIndex) {
+		list[cameraIndex].GetComponent<MainCamera>().SetCharacter(gameManager.characterManager.Get(characterIndex));
 	}
 
 	public void SetScriptActive() {
