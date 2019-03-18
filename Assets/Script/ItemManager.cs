@@ -39,6 +39,7 @@ public class ItemManager : ScriptableObject
         ItemBaseObj = new GameObject(ItemBaseName);
 
         GameObject itemObj = ResourceLoader.LoadPrefab(itemPrefix, Origin, OriginRotation, ItemBaseObj, true);
+        itemObj.GetComponent<Sedan>().SetGameManager(gm);
         ItemList.Add(itemObj);
     }
 }
