@@ -177,7 +177,7 @@ public class BGManager : ScriptableObject {
 	public void InitBasicGroundInfo() {
 		for(int i = 0; i < GroundTypeCnt; i++) {
 			string GroundName = GroundPrefix + (i+1).ToString();
-			GameObject GroundGObj = ResourceLoader.LoadPrefab(GroundName, Origin, OriginRotation, GroundBaseObj, true);
+			GameObject GroundGObj = ResourceLoader.LoadPrefab(GroundName, Origin, OriginRotation, GroundBaseObj, false);
 			if(GroundGObj.GetComponent<BoxCollider2D>() != null) {
 				BoxCollider2D TempBoxCollider2D = GroundGObj.GetComponent<BoxCollider2D>();
 				float top = TempBoxCollider2D.offset.y + (TempBoxCollider2D.size.y / 2f);
@@ -219,7 +219,7 @@ public class BGManager : ScriptableObject {
 	public void InitBasicSceneItemInfo() {
 		for(int i = 0; i < SceneItemCnt; i++) {
 			string SIName = ScenePrefix + (i+1).ToString();
-			GameObject SIGObj = ResourceLoader.LoadPrefab(SIName, Origin, OriginRotation, SceneBaseObj, true);
+			GameObject SIGObj = ResourceLoader.LoadPrefab(SIName, Origin, OriginRotation, SceneBaseObj, false);
 			if(SIGObj.GetComponent<CircleCollider2D>() != null) {
 				CircleCollider2D Temp = SIGObj.GetComponent<CircleCollider2D>();
 				float top = Temp.offset.y + Temp.radius;

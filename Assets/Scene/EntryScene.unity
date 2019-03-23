@@ -227,6 +227,7 @@ MonoBehaviour:
   characterManager: {fileID: 0}
   backGroundManager: {fileID: 0}
   cameraManager: {fileID: 0}
+  itemManager: {fileID: 0}
 --- !u!4 &2085300954
 Transform:
   m_ObjectHideFlags: 0
