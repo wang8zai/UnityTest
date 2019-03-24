@@ -30,7 +30,7 @@ public class ItemManager : ScriptableObject
 
     public bool isEmpty()
     {
-        return ItemList.Count > 0;
+        return ItemList.Count == 0;
     }
 
     public void Init(GameManager gm)

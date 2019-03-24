@@ -11,7 +11,7 @@ public class CharacterManager : ScriptableObject
     
     private string characterPrefix = "Prefab/MainHeroSprite";
 
-    private int playerCnt = 1;
+    private int playerCnt = 2;
 
 	private string CharacterBaseName = "Character";
 	private GameObject CharacterBaseObj = null;

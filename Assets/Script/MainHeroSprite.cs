@@ -120,6 +120,7 @@ public class MainHeroSprite : MonoBehaviour {
 			jumpState = 1;
 		}
 		HeroAllAnimator.SetInteger("JumpState", jumpState);
+
 		if(!gameManager.itemManager.isEmpty()){
 			BoxCollider2D colliderA = gameManager.itemManager.Get(0).GetComponent<BoxCollider2D>();
 			BoxCollider2D colliderB = GetComponent<BoxCollider2D>();
