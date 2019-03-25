@@ -28,7 +28,7 @@
 
 ## 缩写
 方便文档书写
-1. GA -> game architecture    ->游戏架构.主要关于系统的搭建.
+1. GA -> game architecture    ->游戏架构.主要关于系统的搭建.这部分内容都会比较繁琐.我尽量把这个底层搭好....
 2. AI -> Artificial inteligence      ->未来npc的运动. 目前更多的是展望.
 3. UI -> user interface     ->unity UI界面. sprite/2D/PS/animation/等 对理解unity看着的部分有比较多的好处
 4. C# -> C sharp     -> 基本是单纯的C# coding. 对理解unity内部看不到的系统有比较大的好处
