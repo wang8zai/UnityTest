@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainHeroSprite : MonoBehaviour {
+public class BaseCharacter : MonoBehaviour {
 	private GameManager gameManager = null;
 
-	public int PlayerIndex = 0;
+	private int PlayerIndex = 10;
 	private Animator HeroAllAnimator;
 	private PlayerController PController;
 	private Rigidbody2D rd2D;
@@ -29,12 +29,12 @@ public class MainHeroSprite : MonoBehaviour {
 	private bool isGrounded = false;
 	private bool isItemGrounded = false;
 	private bool FallDownFlag = false;
-	public LayerMask groundLayer;
-	public LayerMask ItemLayer;
+	private LayerMask groundLayer;
+	private LayerMask ItemLayer;
 
 	private int collisionInt = 0;
 
-	public MainHeroSprite() {
+	public BaseCharacter() {
 		// SetUpController();
 	}
 
@@ -44,11 +44,23 @@ public class MainHeroSprite : MonoBehaviour {
 		rd2D = GetComponent<Rigidbody2D>();
 		PlayerBottom = GetComponent<CircleCollider2D>().offset.y - GetComponent<CircleCollider2D>().radius;
 		SetUpController();
+		groundLayer = LayerMask.GetMask("Ground");
+		ItemLayer = LayerMask.GetMask("Item");
 		HeroAllAnimator.SetBool("holdFlag", false);
 	}
 
 	public void SetGameManager(GameManager gm) {
 		gameManager = gm;
+	}
+
+	public void SetCharacterAsPlayer(int index) {
+		PlayerIndex = index;
+		SetUpController();
+	}
+
+	public void SetCharacterAsNpc() {
+		PlayerIndex = 10;
+		SetUpController();
 	}
 
 	void SetUpController() {

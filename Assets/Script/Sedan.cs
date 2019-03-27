@@ -37,7 +37,7 @@ public class Sedan : MonoBehaviour {
 				// Debug.Log("Hit Point " + hited);
 				// Debug.Log("Hit Normal " + (1000* hitNormal));	
 				gameObject.GetComponent<Rigidbody2D>().AddForceAtPosition(10* hitNormal, hited);
-				gameManager.characterManager.Get(0).GetComponent<MainHeroSprite>().SetCollisionInt(1);
+				gameManager.characterManager.Get(0).GetComponent<BaseCharacter>().SetCollisionInt(1);
 				// GameObject.Find("Player2").GetComponent<MainHeroSprite>().SetCollisionInt(1);
 
 				gameObject.GetComponent<Rigidbody2D>().AddForceAtPosition(-10* hitNormal, hited);
