@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterManager : ScriptableObject
 {
-    private GameManager gameManager = null;
+    private static CharacterManager _instance;
 
     public GameObject MainHeroGameObject;
     private List<GameObject> PlayerList = new List<GameObject>();
@@ -25,8 +25,16 @@ public class CharacterManager : ScriptableObject
     protected int[] bodypid = {50, 3, 0};
     protected int[] legpid = {35, 3, 0};
 
-    public void Start()
+    public static CharacterManager Instance
     {
+        get
+        {
+            if(_instance == null)
+            {
+                _instance = ScriptableObject.CreateInstance<CharacterManager>();
+            }
+            return _instance;
+        }
     }
 
     public GameObject Get(int index)
@@ -34,39 +42,14 @@ public class CharacterManager : ScriptableObject
         return PlayerList[index];
     }
 
-    public void Init(GameManager gm)
+    public void Init()
     {
-        gameManager = gm;
         CharacterBaseObj = new GameObject(CharacterBaseName);
-        for(int i = 0; i < playerCnt; i++)
+        for (int i = 0; i < playerCnt; i++)
         {
             GameObject characterObj = ResourceLoader.LoadPrefab(characterPrefix, Origin, OriginRotation, CharacterBaseObj, true);
             PlayerList.Add(characterObj);
-            characterObj.GetComponent<BaseCharacter>().SetGameManager(gm);
             characterObj.GetComponent<BaseCharacter>().SetCharacterAsPlayer(0);
         }
-
     }
-
-    // old version init with PID and mass.
-    // public void Init(int cnt)
-    // {
-    //     for(int i=0; i < cnt; i++)
-    //     {
-    //         MainHeroGameObject = Resources.Load("Prefab/MainHeroSprite") as GameObject;
-    //         PlayerList.Add(Instantiate<GameObject>(MainHeroGameObject));
-    //         int[] weightArray = {10,30,10,15};
-    //         PlayerList[i].GetComponent<MainHero>().SetBodyPartsMass(weightArray);
-    //         PlayerList[i].GetComponent<MainHero>().SetBodyGravityScale(gravityScale);
-    //         PlayerList[i].GetComponent<MainHero>().LeftLeg.GetComponent<LeftLeg>().SetGObj(PlayerList[i].GetComponent<MainHero>().LeftLeg);
-    //         PlayerList[i].GetComponent<MainHero>().RightLeg.GetComponent<RightLeg>().SetGObj(PlayerList[i].GetComponent<MainHero>().RightLeg);
-    //         // PlayerList[i].GetComponent<MainHero>().LeftLeg.GetComponent<LeftLeg>().SetRd(PlayerList[i].GetComponent<MainHero>().LeftLeg.GetComponent<Rigidbody2D>());
-    //         // PlayerList[i].GetComponent<MainHero>().RightLeg.GetComponent<RightLeg>().SetRd(PlayerList[i].GetComponent<MainHero>().RightLeg.GetComponent<Rigidbody2D>());
-    //         PlayerList[i].GetComponent<Body>().SetPID(bodypid);
-    //         PlayerList[i].GetComponent<MainHero>().LeftLeg.GetComponent<LeftLeg>().SetPID(legpid);
-    //         PlayerList[i].GetComponent<MainHero>().RightLeg.GetComponent<RightLeg>().SetPID(legpid);
-                        
-    //         PlayerList[i].SetActive(true);
-    //     }
-    // }
 }

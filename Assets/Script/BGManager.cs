@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 public class BGManager : ScriptableObject {
-	private GameManager gameManager = null;
+    private static BGManager _instance;
 
 	private List<List<GameObject>> ObjPools;
 	private float LeftBounder = 0;
@@ -34,18 +34,25 @@ public class BGManager : ScriptableObject {
 	private List<SceneItemBasicInfo> SceneItemBasicInfoList;
 	private List<SceneItemInfo> SIInfoList;
 
-	public class PoolObj : MonoBehaviour{
+    public static BGManager Instance
+    {
+        get
+        {
+            if(_instance == null)
+            {
+                _instance = ScriptableObject.CreateInstance<BGManager>();
+            }
+            return _instance;
+        }
+    }
+
+    public class PoolObj : MonoBehaviour{
 		public GameObject GObj;
 	}
 
-	// This function get automated called when any scriptableObject method is called.
-	public void Awake() {
-	}
-
 	// Init bg manager info. Call for once.
-	public void Init(GameManager gm) {
+	public void Init() {
 		Debug.Log("BG Init");
-		gameManager = gm;
 		c = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
 		cHeight = c.orthographicSize;
 		cWidth = c.aspect * cHeight;

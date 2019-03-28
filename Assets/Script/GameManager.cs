@@ -3,31 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-    private static GameManager instance = null;
-    public SceneManager sceneManager;
-    public CharacterManager characterManager;
-    public BGManager backGroundManager;
-    public CameraManager cameraManager;
-    public ItemManager itemManager;
-    public GameManager Get()
+    private static GameManager _instance;
+
+    public static GameManager Instance
     {
-        if(instance == null)
+        get
         {
-            instance = new GameManager();
+            if (_instance == null)
+            {
+                _instance = new GameManager();
+            }
+            return _instance;
         }
-        else if(instance != this)
-        {
-            instance = this;
-        }
-        return instance;
     }
+
     public void Awake()
     {
-        if(instance == null) {
-            instance = this;
+        if(_instance == null) {
+            _instance = this;
             Init();
         }
-        else if(instance != this) {
+        else if(_instance != this) {
             Destroy(this.gameObject);
         }
 
@@ -36,25 +32,22 @@ public class GameManager : MonoBehaviour {
     public void Init()
     {
         Debug.Log("start Init");
-        sceneManager = ScriptableObject.CreateInstance<SceneManager>();
-        sceneManager.Init(this);
-        cameraManager = ScriptableObject.CreateInstance<CameraManager>();
-        cameraManager.Init(this);
-        backGroundManager = ScriptableObject.CreateInstance<BGManager>();
-        backGroundManager.Init(this);
-        characterManager = ScriptableObject.CreateInstance<CharacterManager>();
-        characterManager.Init(this);
-        itemManager = ScriptableObject.CreateInstance<ItemManager>();
-        itemManager.Init(this);
+
+        SceneManager.Instance.Init();
+        CameraManager.Instance.Init();
+        BGManager.Instance.Init();
+        CharacterManager.Instance.Init();
+        ItemManager.Instance.Init();
+
         SetCharacterCamera(0, 0);
     }
     public void Update()
     {
-        backGroundManager.Update();
+        BGManager.Instance.Update();
     }
 
     private void SetCharacterCamera(int cameraIndex, int characterIndex)
     {
-        cameraManager.SetCharacter(cameraIndex, characterIndex);
+        CameraManager.Instance.SetCharacter(cameraIndex, characterIndex);
     }
 }

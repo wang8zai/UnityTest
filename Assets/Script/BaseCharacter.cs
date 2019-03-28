@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseCharacter : MonoBehaviour {
-	private GameManager gameManager = null;
-
 	private int PlayerIndex = 10;
 	private Animator HeroAllAnimator;
 	private PlayerController PController;
@@ -49,10 +47,6 @@ public class BaseCharacter : MonoBehaviour {
 		HeroAllAnimator.SetBool("holdFlag", false);
 	}
 
-	public void SetGameManager(GameManager gm) {
-		gameManager = gm;
-	}
-
 	public void SetCharacterAsPlayer(int index) {
 		PlayerIndex = index;
 		SetUpController();
@@ -69,7 +63,7 @@ public class BaseCharacter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(gameManager != null){
+		if(GameManager.Instance != null){
 			PController.Update();
 			UpdateStates();
 			SetNewStates();
@@ -77,7 +71,7 @@ public class BaseCharacter : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		if(gameManager != null) {
+		if(GameManager.Instance != null) {
 			UpdateMove();
 			UpdateCatch();
 			UpdateJump();
@@ -133,8 +127,8 @@ public class BaseCharacter : MonoBehaviour {
 		}
 		HeroAllAnimator.SetInteger("JumpState", jumpState);
 
-		if(!gameManager.itemManager.isEmpty()){
-			BoxCollider2D colliderA = gameManager.itemManager.Get(0).GetComponent<BoxCollider2D>();
+		if(!ItemManager.Instance.isEmpty()){
+			BoxCollider2D colliderA = ItemManager.Instance.Get(0).GetComponent<BoxCollider2D>();
 			BoxCollider2D colliderB = GetComponent<BoxCollider2D>();
 			CircleCollider2D colliderC = GetComponent<CircleCollider2D>();
 			Physics2D.IgnoreCollision(colliderA, colliderB, jumpState == 1 || (isGrounded && jumpState == 0));

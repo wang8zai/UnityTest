@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemManager : ScriptableObject
 {
-    private GameManager gameManager = null;
+    private static ItemManager _instance;
 
 	private string ItemBaseName = "Item";
 	private GameObject ItemBaseObj = null;
@@ -16,11 +16,16 @@ public class ItemManager : ScriptableObject
 	private Vector3 Origin = new Vector3(0, 5, 0);
 	private Quaternion OriginRotation = Quaternion.identity;
 
-    public void Awake() {
-    }
-
-    public void Init()
+    public static ItemManager Instance
     {
+        get
+        {
+            if(_instance == null)
+            {
+                _instance = ScriptableObject.CreateInstance<ItemManager>();
+            }
+            return _instance;
+        }
     }
 
     public GameObject Get(int index)
@@ -33,13 +38,11 @@ public class ItemManager : ScriptableObject
         return ItemList.Count == 0;
     }
 
-    public void Init(GameManager gm)
+    public void Init()
     {
-        gameManager = gm;
         ItemBaseObj = new GameObject(ItemBaseName);
 
         GameObject itemObj = ResourceLoader.LoadPrefab(itemPrefix, Origin, OriginRotation, ItemBaseObj, true);
-        itemObj.GetComponent<Sedan>().SetGameManager(gm);
         ItemList.Add(itemObj);
     }
 }

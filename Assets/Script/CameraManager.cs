@@ -3,23 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraManager : ScriptableObject {
+    private static CameraManager _instance;
 
-	private GameManager gameManager = null;
 	public List<GameObject> list = new List<GameObject>();
 	public GameObject CameraPrefab;
 
-	public void Awake() {
-		// Init();
-	}
+    private GameObject CameraBaseObj;
+    private string CameraBaseName = "Camera";
 
-	public void Init(GameManager gm) {
+    private Vector3 Origin = new Vector3(0, 7, -10);
+    private Quaternion OriginRotation = Quaternion.identity;
+
+    public static CameraManager Instance
+    {
+        get
+        {
+            if(_instance == null)
+            {
+                _instance = ScriptableObject.CreateInstance<CameraManager>();
+            }
+            return _instance;
+        }
+    }
+
+	public void Init() {
 		Debug.Log("camera Init");
-		gameManager = gm;
-		GameObject cameraPrefab = Resources.Load<GameObject>("Prefab/Camera/MainCamera");
-		GameObject cameraClone = Instantiate(cameraPrefab, new Vector3(0, 7,-10), Quaternion.identity);
-		//GameObject cameraClone = Instantiate(cameraPrefab);
-		cameraClone.SetActive(true);
-		list.Add(cameraClone);
+        CameraBaseObj = new GameObject(CameraBaseName);
+        GameObject cameraPrefab = ResourceLoader.LoadPrefab("Prefab/Camera/MainCamera", Origin, OriginRotation, CameraBaseObj, true);
+        cameraPrefab.SetActive(true);
+		list.Add(cameraPrefab);
 	}
 
 	public GameObject Get(int index) {
@@ -27,7 +39,7 @@ public class CameraManager : ScriptableObject {
 	}
 
 	public void SetCharacter(int cameraIndex, int characterIndex) {
-		list[cameraIndex].GetComponent<MainCamera>().SetCharacter(gameManager.characterManager.Get(characterIndex));
+		list[cameraIndex].GetComponent<MainCamera>().SetCharacter(CharacterManager.Instance.Get(characterIndex));
 	}
 
 	public void SetScriptActive() {

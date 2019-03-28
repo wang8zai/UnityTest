@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Sedan : MonoBehaviour {
 
-	private GameManager gameManager = null;
 	// Use this for initialization
 	void Start () {
 		
@@ -13,10 +12,6 @@ public class Sedan : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-	}
-
-	public void SetGameManager(GameManager gm) {
-		gameManager = gm;
 	}
 
 	void OnCollisionStay2D(Collision2D coll)
@@ -37,7 +32,7 @@ public class Sedan : MonoBehaviour {
 				// Debug.Log("Hit Point " + hited);
 				// Debug.Log("Hit Normal " + (1000* hitNormal));	
 				gameObject.GetComponent<Rigidbody2D>().AddForceAtPosition(10* hitNormal, hited);
-				gameManager.characterManager.Get(0).GetComponent<BaseCharacter>().SetCollisionInt(1);
+				CharacterManager.Instance.Get(0).GetComponent<BaseCharacter>().SetCollisionInt(1);
 				// GameObject.Find("Player2").GetComponent<MainHeroSprite>().SetCollisionInt(1);
 
 				gameObject.GetComponent<Rigidbody2D>().AddForceAtPosition(-10* hitNormal, hited);

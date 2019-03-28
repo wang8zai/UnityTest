@@ -4,38 +4,18 @@ using UnityEngine;
 
 public class SceneManager : ScriptableObject
 {
-    private GameManager gameManager = null;
-//    public GameObject MainHero;
-    // private static SceneManager instance;
-    // public static SceneManager Instance {
-    //     get {
-    //         Debug.Log("SceneManager Get");
-    //         return instance;
-    //     }
-    // }
-    public void Awake() {
-        Debug.Log("SceneManager Awake");
-        // Init();
-        // if(instance == null) {
-        //     instance = this;
-        //     instance.Init();
-        // }
-        // else if(instance != this) {
-        //     Destroy(this);
-        // }
-        // CManagerScript.Init();
-        // GameObject MainCamera = CManagerScript.Get(0);
+     private static SceneManager _instance;
+     public static SceneManager Instance {
+         get {
+             if(_instance == null)
+            {
+                _instance = ScriptableObject.CreateInstance<SceneManager>();
+            }
+            return _instance;
+         }
+     }
 
-        // BGManagerScript.InitBG();
-        // BGManagerScript.SetCamera(MainCamera);
+    public void Init() {
+    }
 
-        // HeroScript.InitHero(1);
-        // GameObject HeroObj = HeroScript.Get(0);
-        // CManagerScript.SetMainHero(HeroObj);
-        // BGManagerScript.SetMainHero(HeroObj);
-        // CManagerScript.SetScriptActive();
-    }
-    public void Init(GameManager gm) {
-        gameManager = gm;
-    }
 }
