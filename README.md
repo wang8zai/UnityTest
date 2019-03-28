@@ -1,8 +1,8 @@
 # UnityTest
 
 ## 初始化
-1.Scene.当前用的LiftScene  
-2.item=》轿子 MainHeroSprite=》Player. 需要复制一个该object并把playerindex改为1.来声明第二个player  
+1.Scene.当前用的EntryScene. 需要将其它scene remove/unload之后可以运行.     
+2.item -> 轿子 MainHeroSprite -> Player.    
 
 ## 操作说明
 Player1   
