@@ -4,9 +4,22 @@ using UnityEngine;
 using System.Linq;
 
 public class BGManager : ScriptableObject {
+    #region Singleton
     private static BGManager _instance;
+    public static BGManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = ScriptableObject.CreateInstance<BGManager>();
+            }
+            return _instance;
+        }
+    }
+    #endregion
 
-	private List<List<GameObject>> ObjPools;
+    private List<List<GameObject>> ObjPools;
 	private float LeftBounder = 0;
 	private float RightBounder = 0;
 	private float cWidth = 0;
@@ -34,17 +47,6 @@ public class BGManager : ScriptableObject {
 	private List<SceneItemBasicInfo> SceneItemBasicInfoList;
 	private List<SceneItemInfo> SIInfoList;
 
-    public static BGManager Instance
-    {
-        get
-        {
-            if(_instance == null)
-            {
-                _instance = ScriptableObject.CreateInstance<BGManager>();
-            }
-            return _instance;
-        }
-    }
 
     public class PoolObj : MonoBehaviour{
 		public GameObject GObj;

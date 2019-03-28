@@ -4,9 +4,22 @@ using UnityEngine;
 
 public class ItemManager : ScriptableObject
 {
+    #region Singleton
     private static ItemManager _instance;
+    public static ItemManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = ScriptableObject.CreateInstance<ItemManager>();
+            }
+            return _instance;
+        }
+    }
+    #endregion
 
-	private string ItemBaseName = "Item";
+    private string ItemBaseName = "Item";
 	private GameObject ItemBaseObj = null;
 
     private List<GameObject> ItemList = new List<GameObject>();
@@ -15,18 +28,6 @@ public class ItemManager : ScriptableObject
 
 	private Vector3 Origin = new Vector3(0, 5, 0);
 	private Quaternion OriginRotation = Quaternion.identity;
-
-    public static ItemManager Instance
-    {
-        get
-        {
-            if(_instance == null)
-            {
-                _instance = ScriptableObject.CreateInstance<ItemManager>();
-            }
-            return _instance;
-        }
-    }
 
     public GameObject Get(int index)
     {

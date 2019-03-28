@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SceneManager : ScriptableObject
 {
-     private static SceneManager _instance;
+    #region Singleton
+    private static SceneManager _instance;
      public static SceneManager Instance {
          get {
              if(_instance == null)
@@ -14,6 +15,7 @@ public class SceneManager : ScriptableObject
             return _instance;
          }
      }
+    #endregion
 
     public void Init() {
     }

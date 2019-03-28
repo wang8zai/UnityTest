@@ -3,9 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraManager : ScriptableObject {
+    #region Singleton
     private static CameraManager _instance;
+    public static CameraManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = ScriptableObject.CreateInstance<CameraManager>();
+            }
+            return _instance;
+        }
+    }
+    #endregion
 
-	public List<GameObject> list = new List<GameObject>();
+    public List<GameObject> list = new List<GameObject>();
 	public GameObject CameraPrefab;
 
     private GameObject CameraBaseObj;
@@ -13,18 +26,6 @@ public class CameraManager : ScriptableObject {
 
     private Vector3 Origin = new Vector3(0, 7, -10);
     private Quaternion OriginRotation = Quaternion.identity;
-
-    public static CameraManager Instance
-    {
-        get
-        {
-            if(_instance == null)
-            {
-                _instance = ScriptableObject.CreateInstance<CameraManager>();
-            }
-            return _instance;
-        }
-    }
 
 	public void Init() {
 		Debug.Log("camera Init");

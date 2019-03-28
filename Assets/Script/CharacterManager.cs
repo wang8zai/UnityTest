@@ -4,7 +4,20 @@ using UnityEngine;
 
 public class CharacterManager : ScriptableObject
 {
+    #region Singleton
     private static CharacterManager _instance;
+    public static CharacterManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = ScriptableObject.CreateInstance<CharacterManager>();
+            }
+            return _instance;
+        }
+    }
+    #endregion
 
     public GameObject MainHeroGameObject;
     private List<GameObject> PlayerList = new List<GameObject>();
@@ -25,17 +38,6 @@ public class CharacterManager : ScriptableObject
     protected int[] bodypid = {50, 3, 0};
     protected int[] legpid = {35, 3, 0};
 
-    public static CharacterManager Instance
-    {
-        get
-        {
-            if(_instance == null)
-            {
-                _instance = ScriptableObject.CreateInstance<CharacterManager>();
-            }
-            return _instance;
-        }
-    }
 
     public GameObject Get(int index)
     {
