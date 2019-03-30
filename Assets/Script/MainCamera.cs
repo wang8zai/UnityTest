@@ -21,7 +21,11 @@ public class MainCamera : MonoBehaviour {
     void Update () {
         if(MainHero != null) {
             transform.position = MainHero.transform.position + offset;
-        }  
+        }
+        // this is a example to trigger an event.
+        if(Input.GetKeyDown(KeyCode.Z)) {
+            EventManager.Instance.TriggerEvent(Enums.Event.PlayerEventTest);
+        }
 	}
 
     public void SetCharacter(GameObject GObj) {

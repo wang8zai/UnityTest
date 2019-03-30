@@ -33,11 +33,13 @@ public class GameManager : MonoBehaviour {
     {
         Debug.Log("start Init");
 
+        EventManager.Instance.Init();
         SceneManager.Instance.Init();
         CameraManager.Instance.Init();
         BGManager.Instance.Init();
         CharacterManager.Instance.Init();
         ItemManager.Instance.Init();
+
 
         SetCharacterCamera(0, 0);
     }

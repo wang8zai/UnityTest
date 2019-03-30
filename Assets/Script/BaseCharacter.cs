@@ -45,6 +45,11 @@ public class BaseCharacter : MonoBehaviour {
 		groundLayer = LayerMask.GetMask("Ground");
 		ItemLayer = LayerMask.GetMask("Item");
 		HeroAllAnimator.SetBool("holdFlag", false);
+		EventManager.Instance.registerEvent(Enums.Event.PlayerEventTest, PlayerEventTest);
+	}
+
+	public void PlayerEventTest() {
+		Debug.Log("Player Event Test");
 	}
 
 	public void SetCharacterAsPlayer(int index) {
@@ -121,7 +126,7 @@ public class BaseCharacter : MonoBehaviour {
 		if(rd2D.velocity.y < 0.0f && (!isItemGrounded && !isGrounded)) {
 			jumpState = 2;
 		}
-		if(PController.InputTrigger((int)PlayerController.keycodes.CJump, (int)PlayerController.getType.getKD) && (isGrounded || isItemGrounded)) {
+		if(PController.InputTrigger((int)Enums.keycodes.CJump, (int)Enums.getType.getKD) && (isGrounded || isItemGrounded)) {
 			rd2D.velocity = new Vector2(rd2D.velocity.x, 20.0f);
 			jumpState = 1;
 		}
@@ -193,7 +198,7 @@ public class BaseCharacter : MonoBehaviour {
 	}
 
 	private void SetLowerState() {
-		if(PController.InputTrigger((int)PlayerController.keycodes.CRight, (int)PlayerController.getType.getK)) {
+		if(PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getK)) {
 			if(!facingRight) {
 				Flip();
 				HeroAllAnimator.SetInteger("WalkState", 0);
@@ -202,13 +207,13 @@ public class BaseCharacter : MonoBehaviour {
 			else {
 				HeroAllAnimator.SetInteger("WalkState", 10);
 				LowerState = 1;
-				if(PController.InputTrigger((int)PlayerController.keycodes.CRun, (int)PlayerController.getType.getK)) {
+				if(PController.InputTrigger((int)Enums.keycodes.CRun, (int)Enums.getType.getK)) {
 					HeroAllAnimator.SetInteger("WalkState", 15);
 					LowerState = 3;
 				}
 			}
 		}
-		else if(PController.InputTrigger((int)PlayerController.keycodes.CLeft, (int)PlayerController.getType.getK)) {
+		else if(PController.InputTrigger((int)Enums.keycodes.CLeft, (int)Enums.getType.getK)) {
 			if(facingRight) {
 				Flip();
 				HeroAllAnimator.SetInteger("WalkState", 0);
@@ -217,7 +222,7 @@ public class BaseCharacter : MonoBehaviour {
 			else {
 				HeroAllAnimator.SetInteger("WalkState", 10);	
 				LowerState = 1;		
-				if(PController.InputTrigger((int)PlayerController.keycodes.CRun, (int)PlayerController.getType.getK)) {
+				if(PController.InputTrigger((int)Enums.keycodes.CRun, (int)Enums.getType.getK)) {
 					HeroAllAnimator.SetInteger("WalkState", 15);
 					LowerState = 3;
 				}	
@@ -231,7 +236,7 @@ public class BaseCharacter : MonoBehaviour {
 
 	private void SetUpperState() {
 		if(UpperState == 0){
-			if(PController.InputTrigger((int)PlayerController.keycodes.CUp, (int)PlayerController.getType.getK)){
+			if(PController.InputTrigger((int)Enums.keycodes.CUp, (int)Enums.getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 10);
 			// }
 			// else if (!Input.GetKey(CUp) && !Input.GetKey(CDown)){
@@ -241,10 +246,10 @@ public class BaseCharacter : MonoBehaviour {
 			}		
 		}
 		else if(UpperState == 1) {
-			if(PController.InputTrigger((int)PlayerController.keycodes.CUp, (int)PlayerController.getType.getK)){
+			if(PController.InputTrigger((int)Enums.keycodes.CUp, (int)Enums.getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 11);
 			}
-			else if(PController.InputTrigger((int)PlayerController.keycodes.CDown, (int)PlayerController.getType.getK)){
+			else if(PController.InputTrigger((int)Enums.keycodes.CDown, (int)Enums.getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 0);
 			}
 			else{
@@ -252,9 +257,9 @@ public class BaseCharacter : MonoBehaviour {
 			}	
 		}
 		else if(UpperState == 2) {
-			if(PController.InputTrigger((int)PlayerController.keycodes.CUp, (int)PlayerController.getType.getK)){
+			if(PController.InputTrigger((int)Enums.keycodes.CUp, (int)Enums.getType.getK)){
 			}
-			else if(PController.InputTrigger((int)PlayerController.keycodes.CDown, (int)PlayerController.getType.getK)){
+			else if(PController.InputTrigger((int)Enums.keycodes.CDown, (int)Enums.getType.getK)){
 				HeroAllAnimator.SetInteger("LiftState", 10);
 			}
 			else{
@@ -266,7 +271,7 @@ public class BaseCharacter : MonoBehaviour {
 	}
 
 	private void SetSquatState() {
-		if(PController.InputTrigger((int)PlayerController.keycodes.CSquat, (int)PlayerController.getType.getKD)) {
+		if(PController.InputTrigger((int)Enums.keycodes.CSquat, (int)Enums.getType.getKD)) {
 			if(holdFlag) {
 				if(hingeJointToItem != null) {
 					Destroy(hingeJointToItem);
@@ -281,7 +286,7 @@ public class BaseCharacter : MonoBehaviour {
 			HeroAllAnimator.SetInteger("SquatState", 0);
 		}
 
-		if(PController.InputTrigger((int)PlayerController.keycodes.CDrop, (int)PlayerController.getType.getKD)) {
+		if(PController.InputTrigger((int)Enums.keycodes.CDrop, (int)Enums.getType.getKD)) {
 			ForceRunFlag = !ForceRunFlag;
 		}
 	}

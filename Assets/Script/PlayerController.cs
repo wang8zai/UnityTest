@@ -6,13 +6,10 @@ using UnityEngine;
 
 public class PlayerController : ScriptableObject {
 
-	public enum getType {getK = 0, getKD};
-	public enum keycodes {CUp = 0, CLeft, CDown, CRight, CSquat, CDrop, CRun, CJump};
-
 	protected KeyCode[] P1KeyCode = {KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.E, KeyCode.R, KeyCode.T, KeyCode.Y};
 	protected KeyCode[] P2KeyCode= {KeyCode.UpArrow, KeyCode.LeftArrow, KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.Keypad1, KeyCode.Keypad2, KeyCode.Keypad3, KeyCode.Keypad4};
 
-	protected bool[,] stateList = new bool[Enum.GetNames(typeof(keycodes)).Length, Enum.GetNames(typeof(getType)).Length];               // input states map
+	protected bool[,] stateList = new bool[Enum.GetNames(typeof(Enums.keycodes)).Length, Enum.GetNames(typeof(Enums.getType)).Length];               // input states map
 	protected List<KeyCode> keyCodeList;       // state machine. read state from here.
 
 
@@ -27,7 +24,7 @@ public class PlayerController : ScriptableObject {
 		}
 		Debug.Log(this.playerIndex);
 		KeyCode[] KC = GetKeyCode();
-		foreach(KeyCode kc in Enum.GetValues(typeof(keycodes))) {
+		foreach(KeyCode kc in Enum.GetValues(typeof(Enums.keycodes))) {
 			if(isPlayer)
 				keyCodeList.Add(KC[(int)kc]);
 		}
@@ -35,9 +32,9 @@ public class PlayerController : ScriptableObject {
 
 	public void Update() {
 		if(playerIndex < 10) {
-			foreach(KeyCode kc in Enum.GetValues(typeof(keycodes))) {
-				stateList[(int)kc, (int)getType.getKD] = Input.GetKeyDown(keyCodeList[(int)kc]);
-				stateList[(int)kc, (int)getType.getK] = Input.GetKey(keyCodeList[(int)kc]);
+			foreach(KeyCode kc in Enum.GetValues(typeof(Enums.keycodes))) {
+				stateList[(int)kc, (int)Enums.getType.getKD] = Input.GetKeyDown(keyCodeList[(int)kc]);
+				stateList[(int)kc, (int)Enums.getType.getK] = Input.GetKey(keyCodeList[(int)kc]);
 			}
 		}	
 	}
@@ -57,6 +54,6 @@ public class PlayerController : ScriptableObject {
 	}
 
 	public void SetTrigger(int kc, bool t) {
-		stateList[kc, (int)getType.getK] = t;
+		stateList[kc, (int)Enums.getType.getK] = t;
 	}
 }
