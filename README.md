@@ -2,7 +2,7 @@
 
 ## 初始化
 1. Scene.当前用的EntryScene. 需要将其它scene remove/unload之后可以运行.  
-entryScene load后也并没有任何资源的预览，需要运行才可以看见内部内容.       
+entryScene load后也并没有任何资源的预览，需要运行才可以看见内部内容.  
 ~~2. item -> 轿子 MainHeroSprite -> Player.~~
 
 ## 操作说明
