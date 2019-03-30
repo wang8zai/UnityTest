@@ -5,16 +5,16 @@
 
 ## 进行中
 2. 每次运送的起始和终点系统.   C#   ->    暂定为核心玩法.没有玩法玩个鸡.  ->PUSH.  
-4. 自由运动的npc   ->WS   3.31 日结束前加入一个简单的走来走去的npc
+4. 自由运动的npc   ->WS   3.31 日结束前加入一个简单的走来走去的npc  
 
 ## 每周记录
 #### 2018 3/25~3/31
 这些是相对比较容易上手的任务.
-这些都会对unity中force sprite等基本概念有进一步的认识.比较推荐从中选择.
-3. 天气.   C#/GA/UI   ->   最好有一个新的manager管理所有天气.  
-4. 自由运动的npc  GA/C#/AI   ->    参见character manager 和 basecharacter. 按理说可能继承一个npc类比较合理. 现在basecharacter中index<10 时会是玩家，=10会是一个npc.可在集成类中模拟运动的输入. 当前只要可以让npc一个在地图上走走停停就可以. 
-5. 耐力.  C#  ->    跑步一段时间会累.
-6. 地图上的任何东西都可以添加.  C#/UI/GA   ->    各种道具.房子
+这些都会对unity中force sprite等基本概念有进一步的认识.比较推荐从中选择.  
+3. 天气.   C#/GA/UI   ->   最好有一个新的manager管理所有天气.    
+4. 自由运动的npc  GA/C#/AI   ->    参见character manager 和 basecharacter. 按理说可能继承一个npc类比较合理. 现在basecharacter中index<10 时会是玩家，=10会是一个npc.可在集成类中模拟运动的输入. 当前只要可以让npc一个在地图上走走停停就可以.   
+5. 耐力.  C#  ->    跑步一段时间会累.  
+6. 地图上的任何东西都可以添加.  C#/UI/GA   ->    各种道具.房子  
 
 
 
@@ -30,13 +30,13 @@
 
 ## 缩写
 方便文档书写
-1. GA -> game architecture    ->游戏架构.主要关于系统的搭建.这部分内容都会比较繁琐.我尽量把这个底层搭好....
-2. AI -> Artificial inteligence      ->未来npc的运动. 目前更多的是展望.
-3. UI -> user interface     ->unity UI界面. sprite/2D/PS/animation/等 对理解unity看着的部分有比较多的好处
-4. C# -> C sharp     -> 基本是单纯的C# coding. 对理解unity内部看不到的系统有比较大的好处
+1. GA -> game architecture    ->游戏架构.主要关于系统的搭建.这部分内容都会比较繁琐.我尽量把这个底层搭好....  
+2. AI -> Artificial inteligence      ->未来npc的运动. 目前更多的是展望.  
+3. UI -> user interface     ->unity UI界面. sprite/2D/PS/animation/等 对理解unity看着的部分有比较多的好处  
+4. C# -> C sharp     -> 基本是单纯的C# coding. 对理解unity内部看不到的系统有比较大的好处  
 
 ## 后记
-已有代码内部不懂的尽量直接问我，这样应该会比较快的上手.
-我知道的很有限.多交流.
+已有代码内部不懂的尽量直接问我，这样应该会比较快的上手.  
+我知道的很有限.多交流.  
 
 
