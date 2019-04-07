@@ -145,6 +145,7 @@ public class BaseCharacter : MonoBehaviour {
 		UpdateGroundStates();
 		UpdateUpperStates();
 		UpdateLowerStates();
+		UpdateIntersect();
 	}
 
 	private void UpdateGroundStates() {
@@ -187,6 +188,16 @@ public class BaseCharacter : MonoBehaviour {
 			}
 			else if (HeroAllAnimator.GetCurrentAnimatorStateInfo(1).IsName("LowerHalfIdol")){
 				LowerState = 0;
+			}
+		}
+	}
+
+	private void UpdateIntersect() {
+		if(PlayerIndex < 10) {
+			foreach(GameObject obj in CharacterManager.Instance.GetNpcList()) {
+				if(gameObject.GetComponent<SpriteRenderer>().bounds.Intersects(obj.GetComponent<SpriteRenderer>().bounds)) {
+
+				}
 			}
 		}
 	}

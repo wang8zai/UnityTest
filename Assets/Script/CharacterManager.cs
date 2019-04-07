@@ -36,29 +36,34 @@ public class CharacterManager : ScriptableObject
     protected int[] bodypid = {50, 3, 0};
     protected int[] legpid = {35, 3, 0};
 
-    private int playerCnt = 2;
-    private int npcCnt = 3;
+    private int npcCnt = 1;
 
     public GameObject Get(int index)
     {
         return PlayerList[index];
     }
 
+    public List<GameObject> GetNpcList() {
+        return NpcList;
+    }
+
     public void Init()
     {
         CharacterBaseObj = new GameObject(CharacterBaseName);
-        for (int i = 0; i < playerCnt; i++)
-        {
-            GameObject characterObj = ResourceLoader.LoadPrefab(characterPrefix, Origin, OriginRotation, CharacterBaseObj, true);
-            PlayerList.Add(characterObj);
-            characterObj.GetComponent<BaseCharacter>().SetCharacterAsPlayer(0);
-        }
+
+        GameObject P1Obj = ResourceLoader.LoadPrefab(characterPrefix, Origin - new Vector3(2,0,0), OriginRotation, CharacterBaseObj, true);
+        PlayerList.Add(P1Obj);
+        P1Obj.GetComponent<BaseCharacter>().SetCharacterAsPlayer(0);
+
+        GameObject P2Obj = ResourceLoader.LoadPrefab(characterPrefix, Origin - new Vector3(-2,0,0), OriginRotation, CharacterBaseObj, true);
+        PlayerList.Add(P2Obj);
+        P2Obj.GetComponent<BaseCharacter>().SetCharacterAsPlayer(0);
 
         for (int i = 0; i < npcCnt; i++) {
-            GameObject characterObj = ResourceLoader.LoadPrefab(characterPrefix, Origin, OriginRotation, CharacterBaseObj, true);
+            GameObject characterObj = ResourceLoader.LoadPrefab(characterPrefix, Origin - new Vector3(0,0,3), OriginRotation, CharacterBaseObj, true);
             Destroy(characterObj.GetComponent<BaseCharacter>());
             characterObj.AddComponent<Npc>();
-            PlayerList.Add(characterObj);
+            NpcList.Add(characterObj);
             characterObj.GetComponent<Npc>().SetCharacterAsNpc();            
         }
     }
