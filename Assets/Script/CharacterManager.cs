@@ -37,7 +37,7 @@ public class CharacterManager : ScriptableObject
     protected int[] legpid = {35, 3, 0};
 
     private int playerCnt = 2;
-    private int npcCnt = 1;
+    private int npcCnt = 3;
 
     public GameObject Get(int index)
     {

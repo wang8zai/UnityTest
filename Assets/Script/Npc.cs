@@ -3,23 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Npc : BaseCharacter {
-    private IEnumerator LRcoroutine; 
-
     protected void Start() {
         base.Start();
-        LRcoroutine = WaitAndPrint(2.0f);
-        StartCoroutine(LRcoroutine);
+        StartCoroutine(LRcoroutine());
     }
     protected void Update() {
         base.Update();
     }
 
-    private IEnumerator WaitAndPrint(float waitTime)
+    private IEnumerator LRcoroutine()
     {
         while (true)
         {
-            yield return new WaitForSeconds(waitTime);
-            print("WaitAndPrint " + Time.time);
+            PController.SetTrigger(Enums.keycodes.CLeft, false);
+            PController.SetTrigger(Enums.keycodes.CRight, false);
+            bool LRBool  = (Random.value > 0.5f);
+            if(LRBool) {
+                Enums.keycodes LRDirection = (Random.value > 0.5f) ? Enums.keycodes.CLeft : Enums.keycodes.CRight;
+                PController.SetTrigger(LRDirection, true);
+            }
+            yield return new WaitForSeconds(Random.Range(0.5f, 2.0f));
         }
     }
 }

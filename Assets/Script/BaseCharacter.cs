@@ -5,7 +5,7 @@ using UnityEngine;
 public class BaseCharacter : MonoBehaviour {
 	private int PlayerIndex = 10;
 	private Animator HeroAllAnimator;
-	private PlayerController PController;
+	protected PlayerController PController;
 	private Rigidbody2D rd2D;
 
 	private int UpperState = 0;

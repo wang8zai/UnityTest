@@ -53,8 +53,8 @@ public class PlayerController : ScriptableObject {
 		return stateList[kc, b];
 	}
 
-	public void SetTrigger(int kc, bool t) {
-		stateList[kc, (int)Enums.getType.getK] = t;
+	public void SetTrigger(Enums.keycodes kc, bool t) {
+		stateList[(int)kc, (int)Enums.getType.getK] = t;
 	}
 
 }
