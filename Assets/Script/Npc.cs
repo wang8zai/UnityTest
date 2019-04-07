@@ -3,11 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Npc : BaseCharacter {
-	void Start() {
+    private IEnumerator LRcoroutine; 
 
+    protected void Start() {
+        base.Start();
+        LRcoroutine = WaitAndPrint(2.0f);
+        StartCoroutine(LRcoroutine);
+    }
+    protected void Update() {
+        base.Update();
     }
 
-    void Update() {
-        
+    private IEnumerator WaitAndPrint(float waitTime)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(waitTime);
+            print("WaitAndPrint " + Time.time);
+        }
     }
 }

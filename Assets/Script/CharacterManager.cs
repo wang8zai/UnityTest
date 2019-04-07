@@ -25,8 +25,6 @@ public class CharacterManager : ScriptableObject
     
     private string characterPrefix = "Prefab/MainHeroSprite";
 
-    private int playerCnt = 2;
-
 	private string CharacterBaseName = "Character";
 	private GameObject CharacterBaseObj = null;
 
@@ -38,6 +36,8 @@ public class CharacterManager : ScriptableObject
     protected int[] bodypid = {50, 3, 0};
     protected int[] legpid = {35, 3, 0};
 
+    private int playerCnt = 2;
+    private int npcCnt = 1;
 
     public GameObject Get(int index)
     {
@@ -52,6 +52,14 @@ public class CharacterManager : ScriptableObject
             GameObject characterObj = ResourceLoader.LoadPrefab(characterPrefix, Origin, OriginRotation, CharacterBaseObj, true);
             PlayerList.Add(characterObj);
             characterObj.GetComponent<BaseCharacter>().SetCharacterAsPlayer(0);
+        }
+
+        for (int i = 0; i < npcCnt; i++) {
+            GameObject characterObj = ResourceLoader.LoadPrefab(characterPrefix, Origin, OriginRotation, CharacterBaseObj, true);
+            Destroy(characterObj.GetComponent<BaseCharacter>());
+            characterObj.AddComponent<Npc>();
+            PlayerList.Add(characterObj);
+            characterObj.GetComponent<Npc>().SetCharacterAsNpc();            
         }
     }
 }

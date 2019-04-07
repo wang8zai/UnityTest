@@ -37,7 +37,7 @@ public class BaseCharacter : MonoBehaviour {
 	}
 
 	// Use this for initialization
-	void Start () {
+	protected void Start () {
 		HeroAllAnimator = GetComponent<Animator>();
 		rd2D = GetComponent<Rigidbody2D>();
 		PlayerBottom = GetComponent<CircleCollider2D>().offset.y - GetComponent<CircleCollider2D>().radius;
@@ -67,7 +67,7 @@ public class BaseCharacter : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	protected void  Update () {
 		if(GameManager.Instance != null){
 			PController.Update();
 			UpdateStates();

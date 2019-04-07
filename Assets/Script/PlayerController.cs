@@ -36,7 +36,7 @@ public class PlayerController : ScriptableObject {
 				stateList[(int)kc, (int)Enums.getType.getKD] = Input.GetKeyDown(keyCodeList[(int)kc]);
 				stateList[(int)kc, (int)Enums.getType.getK] = Input.GetKey(keyCodeList[(int)kc]);
 			}
-		}	
+		}
 	}
 
 	public KeyCode[] GetKeyCode() {
@@ -56,4 +56,5 @@ public class PlayerController : ScriptableObject {
 	public void SetTrigger(int kc, bool t) {
 		stateList[kc, (int)Enums.getType.getK] = t;
 	}
+
 }

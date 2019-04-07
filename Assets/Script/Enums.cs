@@ -17,5 +17,5 @@ namespace Enums
     };
     public enum Event {
         PlayerEventTest,
-    }
+    };
 }
