@@ -57,4 +57,8 @@ public class PlayerController : ScriptableObject {
 		stateList[(int)kc, (int)Enums.getType.getK] = t;
 	}
 
+	public void SetKDTrigger(Enums.keycodes kc, bool t) {
+		stateList[(int)kc, (int)Enums.getType.getKD] = t;
+	}
+
 }

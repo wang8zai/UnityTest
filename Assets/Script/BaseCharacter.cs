@@ -195,8 +195,10 @@ public class BaseCharacter : MonoBehaviour {
 	private void UpdateIntersect() {
 		if(PlayerIndex < 10) {
 			foreach(GameObject obj in CharacterManager.Instance.GetNpcList()) {
-				if(gameObject.GetComponent<SpriteRenderer>().bounds.Intersects(obj.GetComponent<SpriteRenderer>().bounds)) {
-
+				if(gameObject.GetComponent<BoxCollider2D>().bounds.Intersects(obj.GetComponent<BoxCollider2D>().bounds)) {
+					if(PController.InputTrigger((int)Enums.keycodes.CDrop, (int)Enums.getType.getKD)){
+						EventManager.Instance.TriggerEvent(Enums.Event.NpcIntersect);
+					}
 				}
 			}
 		}
