@@ -24,11 +24,12 @@ public class BaseCharacter : MonoBehaviour {
 	private int jumpState = 0;
 	private HingeJoint2D hingeJointToItem = null;
 
-	private bool isGrounded = false;
-	private bool isItemGrounded = false;
-	private bool FallDownFlag = false;
+	protected bool isGrounded = false;
+	protected bool isItemGrounded = false;
+
 	private LayerMask groundLayer;
 	private LayerMask ItemLayer;
+	private LayerMask UnTouchLayer;
 
 	private int collisionInt = 0;
 
@@ -44,6 +45,7 @@ public class BaseCharacter : MonoBehaviour {
 		SetUpController();
 		groundLayer = LayerMask.GetMask("Ground");
 		ItemLayer = LayerMask.GetMask("Item");
+		UnTouchLayer = LayerMask.GetMask("UntouchItem");
 		HeroAllAnimator.SetBool("holdFlag", false);
 		EventManager.Instance.registerEvent(Enums.Event.PlayerEventTest, PlayerEventTest);
 	}
@@ -51,7 +53,7 @@ public class BaseCharacter : MonoBehaviour {
 	public void PlayerEventTest() {
 		Debug.Log("Player Event Test");
 	}
-
+ 
 	public void SetCharacterAsPlayer(int index) {
 		PlayerIndex = index;
 		SetUpController();
@@ -133,11 +135,19 @@ public class BaseCharacter : MonoBehaviour {
 		HeroAllAnimator.SetInteger("JumpState", jumpState);
 
 		if(!ItemManager.Instance.isEmpty()){
-			BoxCollider2D colliderA = ItemManager.Instance.Get(0).GetComponent<BoxCollider2D>();
+			PolygonCollider2D colliderA = ItemManager.Instance.GetStandCollider(0).GetComponent<PolygonCollider2D>();
+			BoxCollider2D colliderD = ItemManager.Instance.Get(0).GetComponent<BoxCollider2D>();
+			
 			BoxCollider2D colliderB = GetComponent<BoxCollider2D>();
 			CircleCollider2D colliderC = GetComponent<CircleCollider2D>();
-			Physics2D.IgnoreCollision(colliderA, colliderB, jumpState == 1 || (isGrounded && jumpState == 0));
-			Physics2D.IgnoreCollision(colliderA, colliderC, jumpState == 1 || (isGrounded && jumpState == 0));
+			
+			bool IgnoreBool = jumpState == 1 || (isGrounded && jumpState == 0);
+
+			Physics2D.IgnoreCollision(colliderA, colliderB, IgnoreBool);
+			Physics2D.IgnoreCollision(colliderA, colliderC, IgnoreBool);
+
+			Physics2D.IgnoreCollision(colliderD, colliderB, true);
+			Physics2D.IgnoreCollision(colliderD, colliderC, true);
 		}
 	}
 
@@ -149,8 +159,8 @@ public class BaseCharacter : MonoBehaviour {
 	}
 
 	private void UpdateGroundStates() {
-		isGrounded = Physics2D.OverlapArea(new Vector2(transform.localPosition.x - GetComponent<CircleCollider2D>().radius, transform.localPosition.y + PlayerBottom - 0.1f), new Vector2(transform.localPosition.x + GetComponent<CircleCollider2D>().radius,  transform.localPosition.y + PlayerBottom), groundLayer);
-		isItemGrounded = Physics2D.OverlapArea(new Vector2(transform.localPosition.x - GetComponent<CircleCollider2D>().radius, transform.localPosition.y + PlayerBottom - 0.1f), new Vector2(transform.localPosition.x + GetComponent<CircleCollider2D>().radius,  transform.localPosition.y + PlayerBottom), ItemLayer);
+		isGrounded = Physics2D.OverlapArea(new Vector2(transform.localPosition.x - GetComponent<CircleCollider2D>().radius, transform.localPosition.y + PlayerBottom - 0.1f), new Vector2(transform.localPosition.x + GetComponent<CircleCollider2D>().radius,  transform.localPosition.y + PlayerBottom - 0.05f), groundLayer);
+		isItemGrounded = Physics2D.OverlapArea(new Vector2(transform.localPosition.x - GetComponent<CircleCollider2D>().radius, transform.localPosition.y + PlayerBottom - 0.1f), new Vector2(transform.localPosition.x + GetComponent<CircleCollider2D>().radius,  transform.localPosition.y + PlayerBottom - 0.05f), UnTouchLayer);
 	}
 
 	private void UpdateUpperStates(){

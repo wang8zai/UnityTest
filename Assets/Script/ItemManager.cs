@@ -26,12 +26,16 @@ public class ItemManager : ScriptableObject
 
     private string itemPrefix = "Prefab/Item/Sedan";
 
-	private Vector3 Origin = new Vector3(0, 8, 0);
+	private Vector3 Origin = new Vector3(0, 10, 0);
 	private Quaternion OriginRotation = Quaternion.identity;
 
     public GameObject Get(int index)
     {
         return ItemList[index];
+    }
+
+    public GameObject GetStandCollider(int index) {
+        return ItemList[index].transform.GetChild(0).gameObject;
     }
 
     public bool isEmpty()

@@ -13,6 +13,12 @@ public class Npc : BaseCharacter {
 
     protected void Update() {
         base.Update();
+        if(isItemGrounded) {
+            if(LRcoroutineInstance == null) {
+                LRcoroutineInstance = LRcoroutine();
+                StartCoroutine(LRcoroutineInstance);
+            }
+        }
     }
 
     private IEnumerator LRcoroutine()

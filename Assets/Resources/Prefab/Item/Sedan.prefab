@@ -121,7 +121,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 3.3948166
+  m_Mass: 9.857215
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -152,6 +152,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1812373629408285317}
   - component: {fileID: 1174790106242273816}
+  - component: {fileID: 6045164904659942278}
   m_Layer: 15
   m_Name: Sedan Cage
   m_TagString: Untagged
@@ -221,3 +222,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!60 &6045164904659942278
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7294437404786596467}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 5.12, y: 5.12}
+    newSize: {x: 5.12, y: 5.12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1.23, y: 0}
+      - {x: 1.23, y: -1.1}
+      - {x: -1.23, y: -1.1}
+      - {x: -1.23, y: 0}
+      - {x: -1.48, y: 0}
+      - {x: -1.48, y: -1.4599999}
+      - {x: 1.48, y: -1.4599999}
+      - {x: 1.48, y: 0}
