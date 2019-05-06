@@ -34,10 +34,10 @@ public class BGManager : ScriptableObject {
 	private string SceneBaseName = "Scene";
 	private GameObject SceneBaseObj = null; 
 
-	private int GroundTypeCnt = 3;
+	private int GroundTypeCnt = 1;
 	private string GroundPrefix = "Prefab/Ground/Gd_";
 	// private string GourndDirPrefex = "Prefab/Ground/";
-	private int SceneItemCnt = 2;
+	private int SceneItemCnt = 4;
 	private string ScenePrefix = "Prefab/Scene/Sc_";
 	// store the basic info about each kind of ground block
 	private List<GroundBasicInfo> GroundBasicInfoList;

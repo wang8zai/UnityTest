@@ -86,7 +86,7 @@ public class BaseCharacter : MonoBehaviour {
 	}
 
 	private void UpdateMove() {
-		RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0, -3), Mathf.Infinity, groundLayer);
+		// RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0, -3), Mathf.Infinity, groundLayer);
 		// if (hit.collider != null && Mathf.Abs(hit.normal.x) > 0.1f) {
 		// 	Debug.Log(hit.normal);
 		// }
@@ -221,39 +221,18 @@ public class BaseCharacter : MonoBehaviour {
 	}
 
 	private void SetLowerState() {
-		if(PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getK)) {
-			if(!facingRight) {
-				Flip();
-				HeroAllAnimator.SetInteger("WalkState", 0);
-				LowerState = 0;
-			}
-			else {
-				HeroAllAnimator.SetInteger("WalkState", 10);
-				LowerState = 1;
-				if(PController.InputTrigger((int)Enums.keycodes.CRun, (int)Enums.getType.getK)) {
-					HeroAllAnimator.SetInteger("WalkState", 15);
-					LowerState = 3;
-				}
-			}
-		}
-		else if(PController.InputTrigger((int)Enums.keycodes.CLeft, (int)Enums.getType.getK)) {
-			if(facingRight) {
-				Flip();
-				HeroAllAnimator.SetInteger("WalkState", 0);
-				LowerState = 0;
-			}
-			else {
-				HeroAllAnimator.SetInteger("WalkState", 10);	
-				LowerState = 1;		
-				if(PController.InputTrigger((int)Enums.keycodes.CRun, (int)Enums.getType.getK)) {
-					HeroAllAnimator.SetInteger("WalkState", 15);
-					LowerState = 3;
-				}	
-			}
-		}
-		else {
+		if((!facingRight && PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getKD)) || (facingRight && PController.InputTrigger((int)Enums.keycodes.CLeft, (int)Enums.getType.getKD))) {
+			Flip();
 			HeroAllAnimator.SetInteger("WalkState", 0);
-			LowerState = 0;			
+			LowerState = 0;		
+		}
+		else if((facingRight && PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getKD)) || (!facingRight && PController.InputTrigger((int)Enums.keycodes.CLeft, (int)Enums.getType.getKD))) {
+			HeroAllAnimator.SetInteger("WalkState", 10);
+			LowerState = 1;			
+		}
+		if(LowerState == 1 && PController.InputTrigger((int)Enums.keycodes.CRun, (int)Enums.getType.getKD)) {
+			HeroAllAnimator.SetInteger("WalkState", 15);
+			LowerState = 3;
 		}
 	}
 

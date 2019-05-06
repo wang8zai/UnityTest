@@ -5,6 +5,9 @@ TextureImporter:
     21300000: SceneItem_0
     21300002: SceneItem_1
     21300004: SceneItem_2
+    21300006: SceneItem_3
+    21300008: SceneItem_4
+    21300010: SceneItem_5
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -123,7 +126,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: efd7dc91a0da1ce4c846a320f1502e54
+      spriteID: 95759401627def94e9541f93580101ef
       vertices: []
       indices: 
       edges: []
@@ -143,13 +146,53 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 87bc566e6eed570429d9df9b210b8412
+      spriteID: a2c7c8adef42cf74fbf474ac5479cc69
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
       name: SceneItem_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1536
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7bec14be9b341b40ba06984c1ff4117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SceneItem_3
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1536
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d02581bda903b8e458a4e396135647b0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SceneItem_4
       rect:
         serializedVersion: 2
         x: 0
@@ -163,7 +206,27 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5e6e7eb42493607429b064d576f22094
+      spriteID: 2e21184b01f704c43a3e4d4eab3f5ab2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SceneItem_5
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1024
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91306e240ea0c584c83d1973c917080d
       vertices: []
       indices: 
       edges: []

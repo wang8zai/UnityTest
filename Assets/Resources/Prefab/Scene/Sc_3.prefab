@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1058497357391140581
+--- !u!1 &263409263623314368
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,26 +8,25 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1058497357391140582}
-  - component: {fileID: 1058497357391140577}
-  - component: {fileID: 1058497357391140583}
-  - component: {fileID: 1058497357391140576}
-  - component: {fileID: 1850871083510559031}
-  - component: {fileID: 400122436336950347}
+  - component: {fileID: 263409263623314371}
+  - component: {fileID: 263409263623314372}
+  - component: {fileID: 263409263623314370}
+  - component: {fileID: 263409263623314373}
+  - component: {fileID: 1493160536649366546}
   m_Layer: 14
-  m_Name: Sc_1
+  m_Name: Sc_1 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1058497357391140582
+--- !u!4 &263409263623314371
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1058497357391140581}
+  m_GameObject: {fileID: 263409263623314368}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 7.41, y: 15.47, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -35,13 +34,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1058497357391140577
+--- !u!212 &263409263623314372
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1058497357391140581}
+  m_GameObject: {fileID: 263409263623314368}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -72,8 +71,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 966d335db02a41341ba006c1a46df3a2, type: 3}
-  m_Color: {r: 0.7075472, g: 0.42219207, b: 0.13683695, a: 1}
+  m_Sprite: {fileID: 21300004, guid: 966d335db02a41341ba006c1a46df3a2, type: 3}
+  m_Color: {r: 1, g: 0.53873897, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -83,14 +82,14 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &1058497357391140583
+--- !u!50 &263409263623314370
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1058497357391140581}
+  m_GameObject: {fileID: 263409263623314368}
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
@@ -104,13 +103,13 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &1058497357391140576
+--- !u!58 &263409263623314373
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1058497357391140581}
+  m_GameObject: {fileID: 263409263623314368}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -120,34 +119,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1.28
---- !u!114 &1850871083510559031
+--- !u!114 &1493160536649366546
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1058497357391140581}
+  m_GameObject: {fileID: 263409263623314368}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3e87a57cbe829334bbb4df06d828aaf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 3
---- !u!252 &400122436336950347
-SurfaceEffector2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1058497357391140581}
-  m_Enabled: 1
-  m_UseColliderMask: 1
-  m_ColliderMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_Speed: 1
-  m_SpeedVariation: 0
-  m_ForceScale: 0.1
-  m_UseContactForce: 0
-  m_UseFriction: 1
-  m_UseBounce: 1
