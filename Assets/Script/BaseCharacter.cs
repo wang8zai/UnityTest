@@ -33,6 +33,9 @@ public class BaseCharacter : MonoBehaviour {
 
 	private int collisionInt = 0;
 
+	private int speedValue = 0;
+	private int speedValve = 10;
+
 	public BaseCharacter() {
 		// SetUpController();
 	}
@@ -90,7 +93,7 @@ public class BaseCharacter : MonoBehaviour {
 		// if (hit.collider != null && Mathf.Abs(hit.normal.x) > 0.1f) {
 		// 	Debug.Log(hit.normal);
 		// }
-		Vector3 targetVelocity = new Vector2(moveVelocity * LowerState * (facingRight==true?1:-1), rd2D.velocity.y);
+		Vector3 targetVelocity = new Vector2(moveVelocity * speedValue * LowerState * (facingRight==true?1:-1), rd2D.velocity.y);
 		if(collisionInt == 0) {
 			rd2D.velocity = Vector3.SmoothDamp(rd2D.velocity, targetVelocity, ref refvelocity, 0.1f);
 		}
@@ -153,53 +156,15 @@ public class BaseCharacter : MonoBehaviour {
 
 	private void UpdateStates() {
 		UpdateGroundStates();
-		UpdateUpperStates();
-		UpdateLowerStates();
+		// UpdateUpperStates();
+		// UpdateLowerStates();
 		UpdateIntersect();
+		UpdateController();
 	}
 
 	private void UpdateGroundStates() {
 		isGrounded = Physics2D.OverlapArea(new Vector2(transform.localPosition.x - GetComponent<CircleCollider2D>().radius, transform.localPosition.y + PlayerBottom - 0.1f), new Vector2(transform.localPosition.x + GetComponent<CircleCollider2D>().radius,  transform.localPosition.y + PlayerBottom - 0.05f), groundLayer);
 		isItemGrounded = Physics2D.OverlapArea(new Vector2(transform.localPosition.x - GetComponent<CircleCollider2D>().radius, transform.localPosition.y + PlayerBottom - 0.1f), new Vector2(transform.localPosition.x + GetComponent<CircleCollider2D>().radius,  transform.localPosition.y + PlayerBottom - 0.05f), UnTouchLayer);
-	}
-
-	private void UpdateUpperStates(){
-		if(HeroAllAnimator.GetCurrentAnimatorStateInfo(2).IsName("UpperHalfLiftMidHold")) {
-			UpperState = 1;
-		}
-		else if(HeroAllAnimator.GetCurrentAnimatorStateInfo(2).IsName("UpperHalfLiftTopHold")){
-			UpperState = 2;
-		}
-		else if(HeroAllAnimator.GetCurrentAnimatorStateInfo(2).IsName("UpperHalfIdle")){
-			UpperState = 0;
-		}
-		else {
-		}
-	}
-
-	private void UpdateLowerStates() {
-		if(holdFlag) {
-			if(HeroAllAnimator.GetCurrentAnimatorStateInfo(1).IsName("LowerHalfWalkHold")) {
-				LowerState = 1;
-			}
-			else if(HeroAllAnimator.GetCurrentAnimatorStateInfo(1).IsName("LowerHalfRunHold")) {
-				LowerState = 2;
-			}
-			else if (HeroAllAnimator.GetCurrentAnimatorStateInfo(1).IsName("LowerHalfIdol")){
-				LowerState = 0;
-			}
-		}
-		else {
-			if(HeroAllAnimator.GetCurrentAnimatorStateInfo(1).IsName("LowerHalfWalkNormal")) {
-				LowerState = 1;
-			}
-			else if(HeroAllAnimator.GetCurrentAnimatorStateInfo(1).IsName("LowerHalfRunNormal")) {
-				LowerState = 2;
-			}
-			else if (HeroAllAnimator.GetCurrentAnimatorStateInfo(1).IsName("LowerHalfIdol")){
-				LowerState = 0;
-			}
-		}
 	}
 
 	private void UpdateIntersect() {
@@ -214,6 +179,60 @@ public class BaseCharacter : MonoBehaviour {
 		}
 	}
 
+	private void UpdateController() {
+		if(PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getK)) {
+			speedValue = speedValue + 1;
+		}
+		else if (PController.InputTrigger((int)Enums.keycodes.CLeft, (int)Enums.getType.getK)) {
+			speedValue = speedValue - 1;
+		}
+		if(Mathf.Abs(speedValue) > speedValve) {
+			if(speedValue < 0) speedValue = -speedValve;
+			if(speedValue > 0) speedValue = speedValve;
+		}
+	}
+
+	// private void UpdateUpperStates(){
+	// 	if(HeroAllAnimator.GetCurrentAnimatorStateInfo(2).IsName("UpperHalfLiftMidHold")) {
+	// 		UpperState = 1;
+	// 	}
+	// 	else if(HeroAllAnimator.GetCurrentAnimatorStateInfo(2).IsName("UpperHalfLiftTopHold")){
+	// 		UpperState = 2;
+	// 	}
+	// 	else if(HeroAllAnimator.GetCurrentAnimatorStateInfo(2).IsName("UpperHalfIdle")){
+	// 		UpperState = 0;
+	// 	}
+	// 	else {
+	// 	}
+	// }
+
+	// private void UpdateLowerStates() {
+	// 	if(holdFlag) {
+	// 		if(HeroAllAnimator.GetCurrentAnimatorStateInfo(1).IsName("LowerHalfWalkHold")) {
+	// 			LowerState = 1;
+	// 		}
+	// 		else if(HeroAllAnimator.GetCurrentAnimatorStateInfo(1).IsName("LowerHalfRunHold")) {
+	// 			LowerState = 2;
+	// 		}
+	// 		else if (HeroAllAnimator.GetCurrentAnimatorStateInfo(1).IsName("LowerHalfIdol")){
+	// 			LowerState = 0;
+	// 		}
+	// 	}
+	// 	else {
+	// 		if(HeroAllAnimator.GetCurrentAnimatorStateInfo(1).IsName("LowerHalfWalkNormal")) {
+	// 			LowerState = 1;
+	// 		}
+	// 		else if(HeroAllAnimator.GetCurrentAnimatorStateInfo(1).IsName("LowerHalfRunNormal")) {
+	// 			LowerState = 2;
+	// 		}
+	// 		else if (HeroAllAnimator.GetCurrentAnimatorStateInfo(1).IsName("LowerHalfIdol")){
+	// 			LowerState = 0;
+	// 		}
+	// 	}
+	// }
+
+
+
 	private void SetNewStates() {
 		SetUpperState();
 		SetLowerState();
@@ -221,48 +240,56 @@ public class BaseCharacter : MonoBehaviour {
 	}
 
 	private void SetLowerState() {
-		if((!facingRight && PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getKD)) || (facingRight && PController.InputTrigger((int)Enums.keycodes.CLeft, (int)Enums.getType.getKD))) {
-			Flip();
+		if(speedValue == 0) {
 			HeroAllAnimator.SetInteger("WalkState", 0);
-			LowerState = 0;		
+			LowerState = 0;
 		}
-		else if((facingRight && PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getKD)) || (!facingRight && PController.InputTrigger((int)Enums.keycodes.CLeft, (int)Enums.getType.getKD))) {
-			HeroAllAnimator.SetInteger("WalkState", 10);
-			LowerState = 1;			
-		}
-		if(LowerState == 1 && PController.InputTrigger((int)Enums.keycodes.CRun, (int)Enums.getType.getKD)) {
+		else if(speedValue != 0) {
 			HeroAllAnimator.SetInteger("WalkState", 15);
-			LowerState = 3;
+			LowerState = 1;
 		}
+		// if((!facingRight && PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getKD)) || (facingRight && PController.InputTrigger((int)Enums.keycodes.CLeft, (int)Enums.getType.getKD))) {
+		// 	Flip();
+		// 	HeroAllAnimator.SetInteger("WalkState", 0);
+		// 	LowerState = 0;		
+		// }
+		// else if((facingRight && PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getKD)) || (!facingRight && PController.InputTrigger((int)Enums.keycodes.CLeft, (int)Enums.getType.getKD))) {
+		// 	HeroAllAnimator.SetInteger("WalkState", 10);
+		// 	LowerState = 1;			
+		// }
+		// if(LowerState == 1 && PController.InputTrigger((int)Enums.keycodes.CRun, (int)Enums.getType.getKD)) {
+		// 	HeroAllAnimator.SetInteger("WalkState", 15);
+		// 	LowerState = 3;
+		// }
 	}
 
 	private void SetUpperState() {
 		if(UpperState == 0){
-			if(PController.InputTrigger((int)Enums.keycodes.CUp, (int)Enums.getType.getK)){
+			if(PController.InputTrigger((int)Enums.keycodes.CUp, (int)Enums.getType.getKD)){
 				HeroAllAnimator.SetInteger("LiftState", 10);
-			// }
-			// else if (!Input.GetKey(CUp) && !Input.GetKey(CDown)){
-			// 	HeroAllAnimator.SetInteger("LiftState", 0);
+				UpperState = 1;
 			}
 			else{
 			}		
 		}
 		else if(UpperState == 1) {
-			if(PController.InputTrigger((int)Enums.keycodes.CUp, (int)Enums.getType.getK)){
+			if(PController.InputTrigger((int)Enums.keycodes.CUp, (int)Enums.getType.getKD)){
 				HeroAllAnimator.SetInteger("LiftState", 11);
+				UpperState = 2;
 			}
-			else if(PController.InputTrigger((int)Enums.keycodes.CDown, (int)Enums.getType.getK)){
+			else if(PController.InputTrigger((int)Enums.keycodes.CDown, (int)Enums.getType.getKD)){
 				HeroAllAnimator.SetInteger("LiftState", 0);
+				UpperState = 0;
 			}
 			else{
-				// HeroAllAnimator.SetInteger("LiftState", 10);
 			}	
 		}
 		else if(UpperState == 2) {
-			if(PController.InputTrigger((int)Enums.keycodes.CUp, (int)Enums.getType.getK)){
+			if(PController.InputTrigger((int)Enums.keycodes.CUp, (int)Enums.getType.getKD)){
 			}
-			else if(PController.InputTrigger((int)Enums.keycodes.CDown, (int)Enums.getType.getK)){
+			else if(PController.InputTrigger((int)Enums.keycodes.CDown, (int)Enums.getType.getKD)){
 				HeroAllAnimator.SetInteger("LiftState", 10);
+				UpperState = 1;
 			}
 			else{
 			}	
