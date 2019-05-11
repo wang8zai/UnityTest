@@ -154,6 +154,6 @@ public class MainHero : body_part
         float PID_D = 1;
         float CurrentBodyY = transform.position.y;
 //        Debug.Log("BodyY " + CurrentBodyY);
-        PIDControl.PositionYPID(targetY, GetComponent<Rigidbody2D>(), PID_P, PID_I, PID_D, Time.deltaTime);
+        PIDControl.PositionYPID(targetY, GetComponent<Rigidbody2D>(), PID_P, PID_I, PID_D);
     }
 }

@@ -22,6 +22,7 @@ public class BaseCharacter : MonoBehaviour {
 	private bool catchFlag = false; // if the character wants to catch the item or not. If he wants, the item will be detected by raycast 2D.
 	private bool ForceRunFlag = false;
 	private int jumpState = 0;
+	private bool disablePID = false;
 	private HingeJoint2D hingeJointToItem = null;
 
 	protected bool isGrounded = false;
@@ -82,9 +83,10 @@ public class BaseCharacter : MonoBehaviour {
 
 	void FixedUpdate() {
 		if(GameManager.Instance != null) {
-			UpdateMove();
+
 			UpdateCatch();
 			UpdateJump();
+			UpdateMove();
 		}
 	}
 
@@ -93,9 +95,13 @@ public class BaseCharacter : MonoBehaviour {
 		// if (hit.collider != null && Mathf.Abs(hit.normal.x) > 0.1f) {
 		// 	Debug.Log(hit.normal);
 		// }
-		Vector3 targetVelocity = new Vector2(moveVelocity * speedValue * LowerState * (facingRight==true?1:-1), rd2D.velocity.y);
+		// Vector3 targetVelocity = new Vector2(moveVelocity * speedValue * LowerState * (facingRight==true?1:-1), rd2D.velocity.y);
 		if(collisionInt == 0) {
-			rd2D.velocity = Vector3.SmoothDamp(rd2D.velocity, targetVelocity, ref refvelocity, 0.1f);
+			if(!disablePID) {
+				PIDControl.SpeedXPID(speedValue, rd2D, 3000.0f, 30.0f, 10.0f);		
+			}
+
+			// rd2D.velocity = Vector3.SmoothDamp(rd2D.velocity, targetVelocity, ref refvelocity, 0.1f);
 		}
 		else {
 			collisionInt = collisionInt - 1;
@@ -127,6 +133,10 @@ public class BaseCharacter : MonoBehaviour {
 	private void UpdateJump() {
 		if(isGrounded || isItemGrounded) {
 			jumpState = 0;
+			disablePID = false;
+		}
+		else {
+			disablePID = true;
 		}
 		if(rd2D.velocity.y < 0.0f && (!isItemGrounded && !isGrounded)) {
 			jumpState = 2;
@@ -180,7 +190,10 @@ public class BaseCharacter : MonoBehaviour {
 	}
 
 	private void UpdateController() {
-		if(PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getK)) {
+		if(!isGrounded && !isItemGrounded) {
+			// speedValue = 0;
+		}
+		else if(PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getK)) {
 			speedValue = speedValue + 1;
 		}
 		else if (PController.InputTrigger((int)Enums.keycodes.CLeft, (int)Enums.getType.getK)) {
