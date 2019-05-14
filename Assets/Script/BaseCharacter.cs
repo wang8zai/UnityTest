@@ -13,11 +13,11 @@ public class BaseCharacter : MonoBehaviour {
 
 	private float PlayerBottom = 0;
 
-	private float moveVelocity = 5.0f;
+	private float moveVelocity = 1.0f;
 	private Vector3 refvelocity = Vector3.zero;
 	private Vector3 connectPoint = Vector3.zero;
 
-	private bool facingRight = true;
+	private int facingRight = 1;
 	private bool holdFlag = false;
 	private bool catchFlag = false; // if the character wants to catch the item or not. If he wants, the item will be detected by raycast 2D.
 	private bool ForceRunFlag = false;
@@ -35,6 +35,7 @@ public class BaseCharacter : MonoBehaviour {
 	private int collisionInt = 0;
 
 	private int speedValue = 0;
+	private int walkValve = 8;
 	private int speedValve = 10;
 
 	public BaseCharacter() {
@@ -95,7 +96,7 @@ public class BaseCharacter : MonoBehaviour {
 		// if (hit.collider != null && Mathf.Abs(hit.normal.x) > 0.1f) {
 		// 	Debug.Log(hit.normal);
 		// }
-		// Vector3 targetVelocity = new Vector2(moveVelocity * speedValue * LowerState * (facingRight==true?1:-1), rd2D.velocity.y);
+		Vector3 targetVelocity = new Vector2(moveVelocity * speedValue * LowerState, rd2D.velocity.y);
 		if(collisionInt == 0) {
 			if(!disablePID) {
 				PIDControl.SpeedXPID(speedValue, rd2D, 3000.0f, 30.0f, 10.0f);		
@@ -258,8 +259,17 @@ public class BaseCharacter : MonoBehaviour {
 			LowerState = 0;
 		}
 		else if(speedValue != 0) {
-			HeroAllAnimator.SetInteger("WalkState", 15);
-			LowerState = 1;
+			if(Mathf.Abs(speedValue) < walkValve) {
+				HeroAllAnimator.SetInteger("WalkState", 10);
+				LowerState = 1;
+			}
+			else {
+				HeroAllAnimator.SetInteger("WalkState", 15);
+				LowerState = 1;
+			}
+		}
+		if(speedValue * facingRight < 0) {
+			Flip();
 		}
 		// if((!facingRight && PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getKD)) || (facingRight && PController.InputTrigger((int)Enums.keycodes.CLeft, (int)Enums.getType.getKD))) {
 		// 	Flip();
@@ -342,7 +352,7 @@ public class BaseCharacter : MonoBehaviour {
 	}
 
 	private void Flip() {
-		facingRight = !facingRight;
+		facingRight = -facingRight;
  		transform.localScale = new Vector3((-1) * transform.localScale.x, transform.localScale.y, transform.localScale.z);
 	}
 
