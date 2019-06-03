@@ -96,12 +96,11 @@ public class BaseCharacter : MonoBehaviour {
 		// if (hit.collider != null && Mathf.Abs(hit.normal.x) > 0.1f) {
 		// 	Debug.Log(hit.normal);
 		// }
-		Vector3 targetVelocity = new Vector2(moveVelocity * speedValue * LowerState, rd2D.velocity.y);
+		// Vector3 targetVelocity = new Vector2(moveVelocity * speedValue * LowerState, rd2D.velocity.y);
 		if(collisionInt == 0) {
 			if(!disablePID) {
 				PIDControl.SpeedXPID(speedValue, rd2D, 3000.0f, 30.0f, 10.0f);		
 			}
-
 			// rd2D.velocity = Vector3.SmoothDamp(rd2D.velocity, targetVelocity, ref refvelocity, 0.1f);
 		}
 		else {
@@ -132,7 +131,7 @@ public class BaseCharacter : MonoBehaviour {
 	}
 
 	private void UpdateJump() {
-		if(isGrounded || isItemGrounded) {
+		if(isGrounded || (isItemGrounded && !holdFlag)) {
 			jumpState = 0;
 			disablePID = false;
 		}
