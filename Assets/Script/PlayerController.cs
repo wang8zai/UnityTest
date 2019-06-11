@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class PlayerController : ScriptableObject {
 
-	protected KeyCode[] P1KeyCode = {KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.E, KeyCode.R, KeyCode.T, KeyCode.Y};
-	protected KeyCode[] P2KeyCode= {KeyCode.UpArrow, KeyCode.LeftArrow, KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.Keypad1, KeyCode.Keypad2, KeyCode.Keypad3, KeyCode.Keypad4};
+	protected KeyCode[] P1KeyCode = {KeyCode.Q, KeyCode.Z, KeyCode.A, KeyCode.X, KeyCode.W, KeyCode.S, KeyCode.R, KeyCode.F};
+	protected KeyCode[] P2KeyCode= {KeyCode.E, KeyCode.C, KeyCode.D, KeyCode.V, KeyCode.Keypad1, KeyCode.Keypad2, KeyCode.Keypad3, KeyCode.Keypad4};
 
 	protected bool[,] stateList = new bool[Enum.GetNames(typeof(Enums.keycodes)).Length, Enum.GetNames(typeof(Enums.getType)).Length];               // input states map
 	protected List<KeyCode> keyCodeList;       // state machine. read state from here.

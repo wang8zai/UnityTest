@@ -25,21 +25,13 @@ public class Sedan : MonoBehaviour {
                 Vector2 hitPoint = Hits.point;
 				GameObject hobj = coll.gameObject;
 				Vector2 hitNormal = Hits.normal;
-    			// rb.velocity = Vector2.Reflect(lastVelocity, surfaceNormal);
-				// Vector3 hited = transform.InverseTransformPoint(hitPoint);
-				Vector3 hited = hitPoint;
-				// Debug.Log("hitPoint " + Hits.point);
-				// Debug.Log("Hit Point " + hited);
-				// Debug.Log("Hit Normal " + (1000* hitNormal));	
-				gameObject.GetComponent<Rigidbody2D>().AddForceAtPosition(10* hitNormal, hited);
-				CharacterManager.Instance.Get(0).GetComponent<BaseCharacter>().SetCollisionInt(1);
-				// GameObject.Find("Player2").GetComponent<MainHeroSprite>().SetCollisionInt(1);
 
-				gameObject.GetComponent<Rigidbody2D>().AddForceAtPosition(-10* hitNormal, hited);
+				Vector3 hited = hitPoint;
+				gameObject.GetComponent<Rigidbody2D>().AddForceAtPosition(1000* hitNormal, hited);
+				CharacterManager.Instance.Get(0).GetComponent<BaseCharacter>().SetCollisionInt(1);
+
 				coll.gameObject.GetComponent<sceneItem>().minusDuration(1);
             }
-
-			// Destroy(coll.gameObject);
 		}
 	}
 }

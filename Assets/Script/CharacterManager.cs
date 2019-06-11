@@ -57,7 +57,7 @@ public class CharacterManager : ScriptableObject
 
         GameObject P2Obj = ResourceLoader.LoadPrefab(characterPrefix, Origin - new Vector3(-2,0,0), OriginRotation, CharacterBaseObj, true);
         PlayerList.Add(P2Obj);
-        P2Obj.GetComponent<BaseCharacter>().SetCharacterAsPlayer(0);
+        P2Obj.GetComponent<BaseCharacter>().SetCharacterAsPlayer(1);
 
         for (int i = 0; i < npcCnt; i++) {
             GameObject characterObj = ResourceLoader.LoadPrefab(characterPrefix, Origin - new Vector3(0,0,0), OriginRotation, CharacterBaseObj, true);

@@ -23,6 +23,7 @@ public class BaseCharacter : MonoBehaviour {
 	private bool ForceRunFlag = false;
 	private int jumpState = 0;
 	private bool disablePID = false;
+
 	private HingeJoint2D hingeJointToItem = null;
 
 	protected bool isGrounded = false;
@@ -109,6 +110,8 @@ public class BaseCharacter : MonoBehaviour {
 	}
 
 	private void UpdateCatch() {
+		// update catch using animation start//
+		/*
 		Transform LeftHandTransform = transform.Find("Upper/LeftArmUpper/LeftArmLower/LeftHand");
 		if(catchFlag && !holdFlag){
 			Vector2 localpos = LeftHandTransform.position;
@@ -123,10 +126,26 @@ public class BaseCharacter : MonoBehaviour {
 				holdFlag = true;
 			}
 		}
-
 		if(holdFlag) {
 			hingeJointToItem.connectedAnchor = transform.InverseTransformPoint(LeftHandTransform.position);
 			// LeftHandTransform.GetComponent<HingeJoint2D>().anchor = transform.InverseTransformPoint(LeftHandTransform.position);
+		}
+		 */
+		// update catch using animation end //
+		Transform LeftHandTransform = transform.Find("Upper/LeftArmUpper/LeftArmLower/LeftHand");
+		if(PlayerIndex < 10 && !ItemManager.Instance.isEmpty() && !holdFlag) {
+			holdFlag = true;
+			hingeJointToItem = ItemManager.Instance.Get(0).AddComponent<HingeJoint2D>();
+			hingeJointToItem.autoConfigureConnectedAnchor = false;
+			hingeJointToItem.connectedBody = GetComponent<Rigidbody2D>();
+			connectPoint = new Vector3(2, 0, 0);
+			if(PlayerIndex == 1){
+				connectPoint = new Vector3(-2, 0, 0);
+			}
+			hingeJointToItem.anchor = connectPoint;
+		}
+		if(holdFlag) {
+			hingeJointToItem.connectedAnchor = new Vector2(0, transform.InverseTransformPoint(LeftHandTransform.position).y);
 		}
 	}
 
@@ -139,7 +158,7 @@ public class BaseCharacter : MonoBehaviour {
 			disablePID = true;
 		}
 		if(rd2D.velocity.y < 0.0f && (!isItemGrounded && !isGrounded)) {
-			jumpState = 2;
+			jumpState = 0;
 		}
 		if(PController.InputTrigger((int)Enums.keycodes.CJump, (int)Enums.getType.getKD) && (isGrounded || isItemGrounded)) {
 			rd2D.velocity = new Vector2(rd2D.velocity.x, 20.0f);
@@ -190,10 +209,7 @@ public class BaseCharacter : MonoBehaviour {
 	}
 
 	private void UpdateController() {
-		if(!isGrounded && !isItemGrounded) {
-			// speedValue = 0;
-		}
-		else if(PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getK)) {
+		if(PController.InputTrigger((int)Enums.keycodes.CRight, (int)Enums.getType.getK)) {
 			speedValue = speedValue + 1;
 		}
 		else if (PController.InputTrigger((int)Enums.keycodes.CLeft, (int)Enums.getType.getK)) {
@@ -249,7 +265,7 @@ public class BaseCharacter : MonoBehaviour {
 	private void SetNewStates() {
 		SetUpperState();
 		SetLowerState();
-		SetSquatState();
+		// SetSquatState();
 	}
 
 	private void SetLowerState() {
@@ -357,5 +373,26 @@ public class BaseCharacter : MonoBehaviour {
 
 	public void SetCollisionInt(int i) {
 		collisionInt = collisionInt + i;
+	}
+
+	void OnCollisionStay2D(Collision2D coll)
+	{
+		string objname = coll.gameObject.name;
+		objname = objname.Remove(3);
+		if (objname == "Sc_")
+		{	
+			foreach (ContactPoint2D Hits in coll.contacts)
+            {
+                Vector2 hitPoint = Hits.point;
+				GameObject hobj = coll.gameObject;
+				Vector2 hitNormal = Hits.normal;
+				Vector3 hited = hitPoint;	
+				gameObject.GetComponent<Rigidbody2D>().AddForceAtPosition(1000* hitNormal, hited);
+				CharacterManager.Instance.Get(0).GetComponent<BaseCharacter>().SetCollisionInt(1);
+
+				// gameObject.GetComponent<Rigidbody2D>().AddForceAtPosition(-100* hitNormal, hited);
+				coll.gameObject.GetComponent<sceneItem>().minusDuration(1);
+            }
+		}
 	}
 }
