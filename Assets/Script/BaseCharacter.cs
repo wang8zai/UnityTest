@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseCharacter : MonoBehaviour {
-	private int PlayerIndex = 10;
+	public int PlayerIndex = 10;
 	private Animator HeroAllAnimator;
 	protected PlayerController PController;
 	private Rigidbody2D rd2D;
@@ -24,7 +24,7 @@ public class BaseCharacter : MonoBehaviour {
 	private int jumpState = 0;
 	private bool disablePID = false;
 
-	private HingeJoint2D hingeJointToItem = null;
+	private SpringJoint2D hingeJointToItem = null;
 
 	protected bool isGrounded = false;
 	protected bool isItemGrounded = false;
@@ -106,41 +106,25 @@ public class BaseCharacter : MonoBehaviour {
 		}
 		else {
 			collisionInt = collisionInt - 1;
+			PIDControl.SpeedXPID(speedValue - speedValve, rd2D, 3000.0f, 30.0f, 10.0f);	
 		}
 	}
 
 	private void UpdateCatch() {
-		// update catch using animation start//
-		/*
-		Transform LeftHandTransform = transform.Find("Upper/LeftArmUpper/LeftArmLower/LeftHand");
-		if(catchFlag && !holdFlag){
-			Vector2 localpos = LeftHandTransform.position;
-			RaycastHit2D hit = Physics2D.Raycast(localpos, new Vector2(0, 1),Mathf.Infinity,ItemLayer);
-			if (hit.collider != null)
-			{
-				hingeJointToItem = hit.collider.gameObject.AddComponent<HingeJoint2D>();
-				hingeJointToItem.autoConfigureConnectedAnchor = false;
-             	hingeJointToItem.connectedBody = GetComponent<Rigidbody2D>();
-				connectPoint = hit.collider.gameObject.transform.InverseTransformPoint(hit.point);
-				hingeJointToItem.anchor = connectPoint;
-				holdFlag = true;
-			}
-		}
-		if(holdFlag) {
-			hingeJointToItem.connectedAnchor = transform.InverseTransformPoint(LeftHandTransform.position);
-			// LeftHandTransform.GetComponent<HingeJoint2D>().anchor = transform.InverseTransformPoint(LeftHandTransform.position);
-		}
-		 */
 		// update catch using animation end //
 		Transform LeftHandTransform = transform.Find("Upper/LeftArmUpper/LeftArmLower/LeftHand");
 		if(PlayerIndex < 10 && !ItemManager.Instance.isEmpty() && !holdFlag) {
 			holdFlag = true;
-			hingeJointToItem = ItemManager.Instance.Get(0).AddComponent<HingeJoint2D>();
+			hingeJointToItem = ItemManager.Instance.Get(0).AddComponent<SpringJoint2D>();
 			hingeJointToItem.autoConfigureConnectedAnchor = false;
+			hingeJointToItem.autoConfigureDistance = false;
 			hingeJointToItem.connectedBody = GetComponent<Rigidbody2D>();
-			connectPoint = new Vector3(2, 0, 0);
+			hingeJointToItem.distance = 0;
+			hingeJointToItem.frequency = 5;
+			hingeJointToItem.dampingRatio = 0.5f;
+			connectPoint = new Vector3(-2, 0, 0);
 			if(PlayerIndex == 1){
-				connectPoint = new Vector3(-2, 0, 0);
+				connectPoint = new Vector3(2, 0, 0);
 			}
 			hingeJointToItem.anchor = connectPoint;
 		}

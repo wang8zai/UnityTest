@@ -27,7 +27,7 @@ public class Sedan : MonoBehaviour {
 				Vector2 hitNormal = Hits.normal;
 
 				Vector3 hited = hitPoint;
-				gameObject.GetComponent<Rigidbody2D>().AddForceAtPosition(1000* hitNormal, hited);
+				gameObject.GetComponent<Rigidbody2D>().AddForceAtPosition(3000* hitNormal, hited);
 				CharacterManager.Instance.Get(0).GetComponent<BaseCharacter>().SetCollisionInt(1);
 
 				coll.gameObject.GetComponent<sceneItem>().minusDuration(1);

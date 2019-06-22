@@ -36,7 +36,7 @@ public class CharacterManager : ScriptableObject
     protected int[] bodypid = {50, 3, 0};
     protected int[] legpid = {35, 3, 0};
 
-    private int npcCnt = 1;
+    private int npcCnt = 3;
 
     public GameObject Get(int index)
     {
@@ -60,7 +60,7 @@ public class CharacterManager : ScriptableObject
         P2Obj.GetComponent<BaseCharacter>().SetCharacterAsPlayer(1);
 
         for (int i = 0; i < npcCnt; i++) {
-            GameObject characterObj = ResourceLoader.LoadPrefab(characterPrefix, Origin - new Vector3(0,0,0), OriginRotation, CharacterBaseObj, true);
+            GameObject characterObj = ResourceLoader.LoadPrefab(characterPrefix, Origin - new Vector3(0,-3,0), OriginRotation, CharacterBaseObj, true);
             Destroy(characterObj.GetComponent<BaseCharacter>());
             characterObj.AddComponent<Npc>();
             NpcList.Add(characterObj);
